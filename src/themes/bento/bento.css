@@ -1,0 +1,746 @@
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Instrument+Sans:wght@400..700&display=swap');
+
+/* Bento — mọi thứ là một ô trắng bo tròn nằm trên nền xám nhạt.
+   Nguyên tắc: một lưới duy nhất cho tất cả (identity, số liệu, dự án, kỹ
+   năng, liên hệ), ô to xen ô nhỏ, và `dense` để không bao giờ hở lỗ. */
+
+[data-theme='bento'] {
+  --bn-gap: 14px;
+  --bn-radius: 22px;
+  --bn-radius-sm: 13px;
+  --bn-ease: cubic-bezier(0.2, 0.9, 0.25, 1);
+
+  /* Chữ nằm trên ảnh — không lấy được từ token chung vì nền là ảnh, không
+     phải màu theme. Khai báo thành biến riêng để vẫn không có màu viết cứng
+     rải rác trong JSX. */
+  --bn-on-media: #ffffff;
+  --bn-on-media-soft: rgb(255 255 255 / 0.74);
+  --bn-scrim: linear-gradient(
+    to top,
+    rgb(9 9 11 / 0.96) 0%,
+    rgb(9 9 11 / 0.86) 22%,
+    rgb(9 9 11 / 0.55) 46%,
+    rgb(9 9 11 / 0.18) 70%,
+    rgb(9 9 11 / 0.34) 100%
+  );
+
+  --bn-shadow: 0 1px 2px rgb(18 18 20 / 0.05), 0 10px 26px -18px rgb(18 18 20 / 0.38);
+  --bn-shadow-lift: 0 3px 6px rgb(18 18 20 / 0.07), 0 26px 52px -22px rgb(18 18 20 / 0.45);
+}
+
+.bn-shell {
+  --bn-pad: clamp(0.7rem, 2.2vw, 1.6rem);
+  --bn-max: 1340px;
+  font-family: var(--font-body);
+  font-feature-settings: 'ss01';
+}
+
+/* ── Thanh trên cùng ─────────────────────────────────────────────────── */
+
+.bn-topbar {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  padding: var(--bn-pad) var(--bn-pad) 0;
+}
+
+.bn-topbar-inner {
+  margin: 0 auto;
+  max-width: var(--bn-max);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.4rem 0.45rem 0.4rem 1.1rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--surface) 84%, transparent);
+  box-shadow: var(--bn-shadow);
+  backdrop-filter: blur(16px) saturate(1.4);
+}
+
+.bn-brand {
+  font-family: var(--font-display);
+  font-size: 1.12rem;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.bn-main {
+  padding: var(--bn-pad);
+  padding-bottom: calc(var(--bn-pad) * 2);
+}
+
+/* ── Lưới ────────────────────────────────────────────────────────────── */
+
+.bn-grid {
+  margin: 0 auto;
+  max-width: var(--bn-max);
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-auto-flow: row dense;
+  gap: var(--bn-gap);
+  align-items: stretch;
+}
+
+/* Tablet: 2 cột */
+@media (min-width: 600px) {
+  .bn-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .bn-grid > [data-span='2x2'],
+  .bn-grid > [data-tile='lg'] {
+    grid-column: span 2;
+    grid-row: span 2;
+  }
+
+  /* Ô nhỏ được nới thành 2 cột để khép kín hàng cuối — vẫn 1 hàng, chỉ rộng
+     gấp đôi, nên xếp chữ nằm ngang cho khỏi lỏng lẻo. */
+  .bn-grid > [data-tile='sm'][data-wide='1'] {
+    grid-column: span 2;
+  }
+}
+
+[data-tile='sm'][data-wide='1'] .bn-title-btn {
+  font-size: 1.5rem;
+}
+
+[data-tile='sm'][data-wide='1'] p {
+  max-width: 46ch;
+}
+
+/* Desktop: 4 cột — ô lớn mới thật sự là 2×2 giữa lưới */
+@media (min-width: 1024px) {
+  .bn-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.bn-grid > [data-span='full'] {
+  grid-column: 1 / -1;
+}
+
+/* ── Ô ───────────────────────────────────────────────────────────────── */
+
+.bn-tile {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 10.5rem;
+  padding: 1.15rem 1.25rem;
+  border: 1px solid var(--line);
+  border-radius: var(--bn-radius);
+  background: var(--surface);
+  box-shadow: var(--bn-shadow);
+  overflow: hidden;
+  transition:
+    transform 340ms var(--bn-ease),
+    box-shadow 340ms var(--bn-ease),
+    border-color 340ms var(--bn-ease);
+  /* backwards, KHÔNG phải both: fill forwards sẽ khoá transform lại và ăn mất
+     cú nhấc lên khi hover. */
+  animation: bn-pop 620ms var(--bn-ease) backwards;
+  animation-delay: calc(var(--i, 0) * 24ms);
+}
+
+@keyframes bn-pop {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.985);
+  }
+}
+
+.bn-tile[data-lift='1']:hover,
+.bn-tile[data-lift='1']:focus-within {
+  transform: translateY(-3px);
+  box-shadow: var(--bn-shadow-lift);
+  border-color: color-mix(in srgb, var(--tile-accent, var(--ink)) 26%, var(--line));
+}
+
+.bn-toolbar {
+  min-height: 0;
+  padding: 0.8rem 0.9rem;
+}
+
+/* ── Chữ ─────────────────────────────────────────────────────────────── */
+
+.bn-serif {
+  font-family: var(--font-display);
+  font-weight: 400;
+  letter-spacing: -0.015em;
+}
+
+.bn-figure {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(2.7rem, 3.6vw, 3.9rem);
+  line-height: 0.9;
+  letter-spacing: -0.025em;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+}
+
+.bn-label {
+  font-family: var(--font-meta);
+  font-size: 0.675rem;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+.bn-num {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 0.7rem;
+}
+
+.bn-clamp-2,
+.bn-clamp-3,
+.bn-clamp-4 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.bn-clamp-2 {
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+}
+
+.bn-clamp-3 {
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+}
+
+.bn-clamp-4 {
+  -webkit-line-clamp: 4;
+  line-clamp: 4;
+}
+
+/* ── Chip ────────────────────────────────────────────────────────────── */
+
+.bn-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.2rem 0.58rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface-2);
+  font-family: var(--font-meta);
+  font-size: 0.7rem;
+  line-height: 1.5;
+  color: var(--ink-muted);
+  white-space: nowrap;
+}
+
+.bn-chip-media {
+  border-color: rgb(255 255 255 / 0.28);
+  background: rgb(255 255 255 / 0.14);
+  color: var(--bn-on-media);
+  backdrop-filter: blur(6px);
+}
+
+.bn-dot {
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: 999px;
+  background: var(--tile-accent, var(--accent));
+  flex: none;
+}
+
+/* ── Nút lọc ─────────────────────────────────────────────────────────── */
+
+.bn-filter {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.34rem 0.72rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface);
+  font-family: var(--font-meta);
+  font-size: 0.78rem;
+  color: var(--ink-muted);
+  cursor: pointer;
+  transition:
+    color 200ms var(--bn-ease),
+    background-color 200ms var(--bn-ease),
+    border-color 200ms var(--bn-ease);
+}
+
+.bn-filter:hover {
+  color: var(--ink);
+  border-color: color-mix(in srgb, var(--ink) 22%, var(--line));
+}
+
+.bn-filter[aria-pressed='true'] {
+  color: var(--accent-ink);
+  background: var(--tile-accent, var(--ink));
+  border-color: transparent;
+}
+
+.bn-filter[aria-pressed='true'] .bn-dot {
+  background: currentColor;
+}
+
+.bn-search {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  flex: 1 1 12rem;
+  min-width: 0;
+  padding: 0.45rem 0.9rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface-2);
+  transition: border-color 200ms var(--bn-ease);
+}
+
+.bn-search:focus-within {
+  border-color: var(--accent);
+}
+
+.bn-search input {
+  width: 100%;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  font-family: var(--font-meta);
+  font-size: 0.88rem;
+  color: var(--ink);
+}
+
+.bn-search input::-webkit-search-cancel-button {
+  filter: grayscale(1);
+}
+
+.bn-select {
+  padding: 0.4rem 0.7rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface-2);
+  font-family: var(--font-meta);
+  font-size: 0.78rem;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+/* ── Ô dự án ─────────────────────────────────────────────────────────── */
+
+.bn-proj {
+  text-decoration: none;
+}
+
+.bn-title-btn {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  font-family: var(--font-display);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  color: inherit;
+  transition: color 220ms var(--bn-ease);
+}
+
+/* Vùng bấm phủ cả ô: bấm chỗ nào trên ô cũng mở được chi tiết, nhưng tên
+   dự án vẫn là <button> thật với accessible name đúng bằng title. */
+.bn-title-btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+}
+
+[data-tile='sm'] .bn-title-btn {
+  font-size: 1.28rem;
+  line-height: 1.14;
+  color: var(--ink);
+}
+
+[data-tile='sm']:hover .bn-title-btn {
+  color: var(--tile-accent, var(--ink));
+}
+
+[data-tile='lg'] {
+  padding: 0;
+  min-height: 17rem;
+  background: var(--surface-2);
+}
+
+[data-tile='lg'] .bn-title-btn {
+  font-size: clamp(1.6rem, 2.4vw, 2.35rem);
+  line-height: 1.02;
+  color: var(--bn-on-media);
+}
+
+.bn-media {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: inherit;
+}
+
+/* ProjectThumb đặt aspect-ratio/width bằng inline style, nên phải !important
+   mới ép nó phủ kín ô được. */
+.bn-shot {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  aspect-ratio: auto !important;
+  object-fit: cover !important;
+  /* Ảnh chụp màn hình có thông tin nằm ở nửa trên, nên cắt thì cắt phía dưới. */
+  object-position: 50% 22% !important;
+  transition: transform 700ms var(--bn-ease);
+}
+
+/* Bìa gradient của ProjectThumb đã in sẵn tên dự án — ở ô lớn mình tự đặt tên
+   lên trên lớp phủ, nên giấu chữ của nó đi để khỏi lặp hai lần. */
+.bn-shot[data-fallback='gradient'] > span {
+  display: none !important;
+}
+
+[data-tile='lg']:hover .bn-shot {
+  transform: scale(1.045);
+}
+
+.bn-scrim {
+  position: absolute;
+  inset: 0;
+  background: var(--bn-scrim);
+  pointer-events: none;
+}
+
+.bn-proj-body {
+  position: relative;
+  margin-top: auto;
+  padding: 1.2rem 1.3rem;
+  color: var(--bn-on-media);
+}
+
+.bn-proj-top {
+  position: absolute;
+  top: 1rem;
+  left: 1.1rem;
+  right: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  z-index: 1;
+}
+
+.bn-on-media-soft {
+  color: var(--bn-on-media-soft);
+}
+
+/* Sọc màu category ở mép trên ô nhỏ — chỉ hiện khi để chuột vào */
+[data-tile='sm']::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 1.25rem;
+  right: 1.25rem;
+  height: 2px;
+  border-radius: 0 0 2px 2px;
+  background: var(--tile-accent, var(--accent));
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 380ms var(--bn-ease);
+}
+
+[data-tile='sm']:hover::before,
+[data-tile='sm']:focus-within::before {
+  transform: scaleX(1);
+}
+
+/* ── Ô identity ──────────────────────────────────────────────────────── */
+
+.bn-name {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(2.5rem, 5.2vw, 4.1rem);
+  line-height: 0.94;
+  letter-spacing: -0.03em;
+  margin: 0;
+  color: var(--ink);
+  text-wrap: balance;
+}
+
+.bn-headline {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(1.05rem, 1.5vw, 1.35rem);
+  line-height: 1.28;
+  color: var(--ink);
+  text-wrap: balance;
+}
+
+.bn-avatar {
+  width: 3.6rem;
+  height: 3.6rem;
+  border-radius: 999px;
+  object-fit: cover;
+  border: 1px solid var(--line);
+  background: var(--surface-2);
+  flex: none;
+}
+
+/* ── Liên kết ────────────────────────────────────────────────────────── */
+
+.bn-link {
+  color: var(--ink-muted);
+  text-decoration: none;
+  transition: color 200ms var(--bn-ease);
+}
+
+.bn-link:hover {
+  color: var(--ink);
+}
+
+.bn-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface);
+  font-family: var(--font-meta);
+  font-size: 0.82rem;
+  color: var(--ink);
+  cursor: pointer;
+  text-decoration: none;
+  transition:
+    background-color 200ms var(--bn-ease),
+    border-color 200ms var(--bn-ease),
+    color 200ms var(--bn-ease);
+}
+
+.bn-btn:hover {
+  background: var(--surface-2);
+  border-color: color-mix(in srgb, var(--ink) 22%, var(--line));
+}
+
+.bn-btn-solid {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--bg);
+}
+
+.bn-btn-solid:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-ink);
+}
+
+/* ── Chi tiết dự án ──────────────────────────────────────────────────── */
+
+.bn-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 0;
+}
+
+@media (min-width: 640px) {
+  .bn-overlay {
+    align-items: center;
+    padding: clamp(1rem, 3vw, 2.5rem);
+  }
+}
+
+.bn-backdrop {
+  position: absolute;
+  inset: 0;
+  border: 0;
+  cursor: default;
+  background: rgb(12 12 14 / 0.42);
+  backdrop-filter: blur(4px);
+  animation: bn-fade 260ms var(--bn-ease) backwards;
+}
+
+@keyframes bn-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+.bn-dialog {
+  position: relative;
+  width: 100%;
+  max-width: 56rem;
+  max-height: 92dvh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  border: 1px solid var(--line);
+  border-radius: var(--bn-radius) var(--bn-radius) 0 0;
+  background: var(--bg);
+  box-shadow: 0 40px 90px -30px rgb(12 12 14 / 0.5);
+  animation: bn-rise 380ms var(--bn-ease) backwards;
+}
+
+@media (min-width: 640px) {
+  .bn-dialog {
+    border-radius: var(--bn-radius);
+  }
+}
+
+@keyframes bn-rise {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.99);
+  }
+}
+
+.bn-dialog-hero {
+  position: relative;
+  aspect-ratio: 16 / 8;
+  overflow: hidden;
+  background: var(--surface-2);
+}
+
+.bn-dialog-body {
+  display: grid;
+  gap: var(--bn-gap);
+  grid-template-columns: repeat(2, 1fr);
+  padding: var(--bn-gap);
+}
+
+@media (min-width: 700px) {
+  .bn-dialog-body {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.bn-dialog-body > [data-span='full'] {
+  grid-column: 1 / -1;
+}
+
+/* Hàng số liệu trong hộp thoại: bao nhiêu ô cũng chia đều hết chiều ngang,
+   khỏi hụt hai cột khi dự án không có sao/fork. */
+.bn-facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--bn-gap);
+}
+
+.bn-facts > * {
+  flex: 1 1 8rem;
+}
+
+.bn-mini {
+  min-height: 0;
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--line);
+  border-radius: var(--bn-radius-sm);
+  background: var(--surface);
+}
+
+.bn-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.2rem;
+  height: 2.2rem;
+  padding: 0 0.8rem;
+  border: 1px solid rgb(255 255 255 / 0.3);
+  border-radius: 999px;
+  background: rgb(20 20 24 / 0.5);
+  backdrop-filter: blur(8px);
+  color: var(--bn-on-media);
+  font-family: var(--font-meta);
+  font-size: 0.78rem;
+  cursor: pointer;
+  transition: background-color 200ms var(--bn-ease);
+}
+
+.bn-close:hover {
+  background: rgb(20 20 24 / 0.78);
+}
+
+.bn-nav-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.2rem;
+  height: 2.2rem;
+  border: 1px solid rgb(255 255 255 / 0.3);
+  border-radius: 999px;
+  background: rgb(20 20 24 / 0.5);
+  backdrop-filter: blur(8px);
+  color: var(--bn-on-media);
+  cursor: pointer;
+  transition: background-color 200ms var(--bn-ease);
+}
+
+.bn-nav-btn:hover {
+  background: rgb(20 20 24 / 0.78);
+}
+
+/* Ô "chặng đường" thường ngắn hơn ô kỹ năng bên cạnh nhưng phải cao bằng nó
+   — căn giữa theo chiều dọc để khoảng trống trông là chủ ý. */
+.bn-tile[data-cell='journey'] {
+  justify-content: center;
+}
+
+/* ── Mobile: ô số liệu nằm ngang cho khỏi tốn bốn màn hình ───────────── */
+
+@media (max-width: 599px) {
+  .bn-tile[data-cell='stat'] {
+    min-height: 0;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.9rem;
+    padding: 0.85rem 1.15rem;
+  }
+
+  .bn-tile[data-cell='stat'] > div {
+    display: flex;
+    flex: 1;
+    align-items: baseline;
+    gap: 0.75rem;
+    margin-top: 0;
+  }
+
+  .bn-tile[data-cell='stat'] .bn-figure {
+    font-size: 2.1rem;
+  }
+
+  .bn-tile[data-cell='stat'] .bn-label {
+    margin-top: 0;
+    margin-left: auto;
+  }
+}
+
+/* ── Ít chuyển động ──────────────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .bn-tile[data-lift='1']:hover,
+  .bn-tile[data-lift='1']:focus-within {
+    transform: none;
+  }
+
+  [data-tile='lg']:hover .bn-shot {
+    transform: none;
+  }
+
+  [data-tile='sm']::before {
+    transform: scaleX(1);
+    opacity: 0.5;
+  }
+}
