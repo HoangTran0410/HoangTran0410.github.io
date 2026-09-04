@@ -12,7 +12,7 @@
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
     "sync": "tsx scripts/sync-github.mjs",
-    "shots": "node scripts/shots.mjs"
+    "shots": "tsx scripts/shots.mjs"
   },
   "repository": {
     "type": "git",

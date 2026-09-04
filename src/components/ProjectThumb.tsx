@@ -17,7 +17,12 @@ const H = 800;
 
 export function ProjectThumb({ project, ratio = '8 / 5', className, eager }: Props) {
   const [failed, setFailed] = useState(false);
-  const src = project.shot ?? (SHOT_SLUGS.includes(project.slug) ? `/shots/${project.slug}.webp` : null);
+  // shot === null nghĩa là cố tình bỏ ảnh chụp, khác hẳn với shot === undefined
+  // (chưa khai báo gì, cứ tìm theo slug).
+  const src =
+    project.shot === null
+      ? null
+      : (project.shot ?? (SHOT_SLUGS.includes(project.slug) ? `/shots/${project.slug}.webp` : null));
 
   if (src && !failed) {
     return (

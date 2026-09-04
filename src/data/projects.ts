@@ -47,9 +47,9 @@ export const PROJECTS: CuratedProject[] = [
     },
     category: 'products',
     tags: ['JavaScript', 'Chrome Extension', 'Userscript', 'Open source'],
-    links: {
-      demo: 'https://useful-scripts-extension.github.io/useful-script/popup/popup.html',
-    },
+    // Không có link demo: trang popup chỉ chạy được khi đã cài extension, khách
+    // vào chỉ thấy mãi màn hình "Loading all scripts…". Để link GitHub là đủ.
+    links: {},
     featured: true,
     year: 2021,
     status: 'active',
@@ -208,6 +208,7 @@ export const PROJECTS: CuratedProject[] = [
   },
   {
     slug: 'lol2d-mapeditor',
+    shot: null, // ảnh chụp chỉ ra hộp thoại chọn chế độ trên nền đen
     repo: 'LOL2D/LOL2D-MapEditor',
     title: 'LOL2D Map Editor',
     tagline: {
@@ -690,6 +691,7 @@ export const PROJECTS: CuratedProject[] = [
   },
   {
     slug: 'music-visualizer',
+    shot: null, // chưa chọn nhạc thì canvas trống trơn
     repo: 'HoangTran0410/music-visualizer',
     title: 'Music Visualizer',
     tagline: {

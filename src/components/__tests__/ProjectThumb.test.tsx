@@ -31,7 +31,15 @@ describe('ProjectThumb', () => {
   });
 
   it('không đi tìm ảnh của dự án chưa được chụp', () => {
-    const { container } = render(<ProjectThumb project={{ ...bySlug('cipher-breaker'), shot: undefined }} />);
+    const p = { ...bySlug('moba2d'), slug: 'chua-chup-bao-gio', shot: undefined };
+    const { container } = render(<ProjectThumb project={p} />);
     expect(container.querySelector('img')).toBeNull();
+  });
+
+  it('shot: null nghĩa là cố tình bỏ ảnh chụp, luôn dùng bìa gradient', () => {
+    const p = { ...bySlug('moba2d'), shot: null };
+    const { container } = render(<ProjectThumb project={p} />);
+    expect(container.querySelector('img')).toBeNull();
+    expect(container.querySelector('[data-fallback="gradient"]')).toBeTruthy();
   });
 });

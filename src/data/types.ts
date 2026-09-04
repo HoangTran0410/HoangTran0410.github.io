@@ -55,8 +55,12 @@ export interface CuratedProject {
   /** Năm bắt đầu, dùng để sắp xếp và hiện timeline */
   year: number;
   status: ProjectStatus;
-  /** Ghi đè ảnh thumbnail; mặc định tìm /shots/<slug>.webp */
-  shot?: string;
+  /**
+   * Ghi đè ảnh thumbnail. Mặc định (bỏ trống) là tìm /shots/<slug>.webp.
+   * Đặt `null` nghĩa là cố tình không dùng ảnh chụp — trang demo chụp ra xấu
+   * hoặc chỉ là màn hình loading — và luôn dùng bìa gradient.
+   */
+  shot?: string | null;
 }
 
 /** Dữ liệu sync tự động từ GitHub API — KHÔNG sửa tay, CI ghi đè. */
