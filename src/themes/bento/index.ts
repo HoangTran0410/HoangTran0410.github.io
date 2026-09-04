@@ -7,11 +7,12 @@ import { ProjectDetail } from './ProjectDetail';
 import { Shell } from './Shell';
 import { Stats } from './Stats';
 import { Story } from './Story';
+import { Timeline } from './Timeline';
 
 const theme: Theme = {
   meta: THEME_META.bento,
   Shell,
-  sections: { Identity, Stats, Catalog, ProjectDetail, Story, Contact },
+  sections: { Identity, Stats, Catalog, Timeline, ProjectDetail, Story, Contact },
 };
 
 export default theme;

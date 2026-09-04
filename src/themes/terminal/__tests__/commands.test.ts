@@ -60,6 +60,13 @@ describe('help', () => {
     for (const name of COMMAND_NAMES) expect(body).toContain(name);
   });
 
+  it('nhắc lệnh timeline — nếu không có ở đây thì không ai tìm ra nó', () => {
+    const result = runCommand('help', makeCtx());
+    expect(result.kind).toBe('text');
+    if (result.kind !== 'text') return;
+    expect(result.lines.join('\n')).toMatch(/timeline/);
+  });
+
   it('nói tiếng Việt khi locale là vi', () => {
     const result = runCommand('help', makeCtx('vi'));
     expect(result.kind).toBe('text');
@@ -163,8 +170,24 @@ describe('các lệnh trả về một khối nội dung', () => {
     ['stats', 'stats'],
     ['skills', 'skills'],
     ['contact', 'contact'],
+    ['timeline', 'timeline'],
   ])('%s → %s', (input, kind) => {
     expect(runCommand(input, makeCtx()).kind).toBe(kind);
+  });
+});
+
+describe('timeline', () => {
+  it('trả về đúng khối timeline, không kèm gì khác', () => {
+    expect(runCommand('timeline', makeCtx())).toEqual({ kind: 'timeline' });
+  });
+
+  it('`log` là alias — nhưng `history` thì không, vì ↑ ↓ đang giữ nghĩa đó', () => {
+    expect(runCommand('log', makeCtx())).toEqual({ kind: 'timeline' });
+    expect(runCommand('history', makeCtx()).kind).toBe('error');
+  });
+
+  it('Tab hoàn thành `time` → `timeline`: chỉ đúng một lệnh khớp tiền tố', () => {
+    expect(COMMAND_NAMES.filter((n) => n.startsWith('time'))).toEqual(['timeline']);
   });
 });
 

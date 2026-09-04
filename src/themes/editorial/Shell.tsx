@@ -8,6 +8,7 @@ import { Identity } from './Identity';
 import { ProjectDetail } from './ProjectDetail';
 import { Stats } from './Stats';
 import { Story } from './Story';
+import { Timeline } from './Timeline';
 import './editorial.css';
 import './print.css';
 
@@ -49,6 +50,7 @@ export function Shell() {
       <main className="mx-auto max-w-[1400px]">
         <Identity />
         <Stats />
+        <Timeline />
         <Catalog />
         <Story />
         <Contact />

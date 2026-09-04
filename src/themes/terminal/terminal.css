@@ -183,6 +183,20 @@
   font: inherit;
 }
 
+/* Cùng hình dạng với .term-code nhưng bấm được — dùng cho lệnh mà dòng gợi ý
+   muốn người ta chạy thử ngay. */
+.term-code-btn {
+  background: none;
+  cursor: pointer;
+  transition: background-color 160ms ease, border-color 160ms ease;
+}
+
+.term-code-btn:hover {
+  border-color: var(--accent);
+  background: var(--term-wash);
+  text-shadow: var(--term-glow);
+}
+
 .term-entry {
   margin-block: 0.9rem 1.35rem;
 }
@@ -506,6 +520,166 @@
   }
 }
 
+/* ── timeline ─────────────────────────────────────────────────────────────
+   Vẽ như `git log --graph`: cột năm bên trái, nhánh là ký tự khung thật chứ
+   không phải border, nên nó nằm đúng lưới chữ đơn cách như mọi thứ khác. */
+
+.term-timeline {
+  --tl-rail: color-mix(in oklab, var(--accent) 42%, transparent);
+}
+
+.term-tl-lede {
+  max-width: 92ch;
+  margin-block: 0.35rem 0.7rem !important;
+  font-size: 0.9em;
+}
+
+.term-tl {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.term-tl-year {
+  display: grid;
+  grid-template-columns: 4rem minmax(0, 1fr);
+  gap: 0 0.55rem;
+  animation: term-tl-in 300ms ease both;
+  animation-delay: calc(var(--i, 0) * 40ms);
+}
+
+@keyframes term-tl-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.term-tl-num {
+  grid-column: 1;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  text-align: right;
+  text-shadow: var(--term-glow);
+}
+
+.term-tl-cap {
+  grid-column: 2;
+  display: flex;
+  align-items: baseline;
+  min-width: 0;
+}
+
+.term-tl-sum {
+  margin-left: 0.75rem;
+  overflow: hidden;
+  font-size: 0.85em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.term-tl-nodes {
+  grid-column: 2;
+}
+
+.term-tl-node {
+  display: grid;
+  grid-template-columns: max-content max-content minmax(0, 1fr) max-content;
+  align-items: baseline;
+  padding: 0.06rem 0.4rem 0.06rem 0;
+  transition: background-color 140ms ease;
+}
+
+.term-tl-node:hover,
+.term-tl-node:focus-within {
+  background: var(--term-wash);
+}
+
+/* Mốc đời người được nền riêng — nhìn lướt là thấy năm nào có chuyện xảy ra. */
+.term-tl-node[data-kind='job'],
+.term-tl-node[data-kind='school'] {
+  background: rgb(251 191 36 / 0.05);
+}
+
+.term-tl-rail {
+  color: var(--tl-rail);
+  user-select: none;
+}
+
+.term-tl-mark {
+  padding-right: 0.55rem;
+  color: var(--row-accent, var(--accent));
+}
+
+.term-tl-node[data-kind='job'] .term-tl-mark,
+.term-tl-node[data-kind='school'] .term-tl-mark {
+  color: var(--term-amber);
+  text-shadow: 0 0 9px rgb(251 191 36 / 0.45);
+}
+
+.term-tl-main {
+  display: flex;
+  min-width: 0;
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: 0.75rem;
+}
+
+.term-tl-name {
+  min-width: 12.5rem;
+  border: 0;
+  background: none;
+  padding: 0;
+  color: var(--ink);
+  font: inherit;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+}
+
+.term-tl-node[data-kind='job'] .term-tl-name,
+.term-tl-node[data-kind='school'] .term-tl-name {
+  color: var(--term-amber);
+  cursor: default;
+}
+
+.term-tl-node:hover button.term-tl-name,
+button.term-tl-name:hover {
+  color: var(--accent);
+  text-shadow: var(--term-glow);
+}
+
+.term-tl-note {
+  flex: 1 1 18rem;
+  min-width: 0;
+  overflow: hidden;
+  color: var(--ink-muted);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.term-tl-meta {
+  padding-left: 0.75rem;
+  color: var(--ink-muted);
+  font-size: 0.9em;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.term-tl-meta:empty {
+  display: none;
+}
+
+.term-tl-stars {
+  color: var(--term-amber);
+  opacity: 0.75;
+}
+
 /* ── cat / dialog ─────────────────────────────────────────────────────── */
 
 .term-card {
@@ -681,6 +855,10 @@
 
 .term-composer {
   z-index: 40;
+  /* Hàng nút gợi ý bên dưới tự cuộn ngang, nhưng nó vẫn là min-content của ô
+     lưới này — thêm một nút là cả .term-shell phình ra quá bề ngang màn hình
+     và mọi khối bị cắt cụt bên phải. min-width: 0 trả quyền cuộn về cho nó. */
+  min-width: 0;
   border-top: 1px solid var(--line);
   background: linear-gradient(var(--surface), var(--surface-2));
   padding: 0.5rem clamp(0.75rem, 2vw, 1.75rem);
@@ -837,6 +1015,38 @@
     white-space: normal;
   }
 
+  /* Timeline hẹp lại: cột năm ngắn hơn, mô tả xuống dòng, mốc thời gian /
+     sao tụt xuống dưới tên thay vì chen ngang. */
+  .term-tl-year {
+    grid-template-columns: 3.1rem minmax(0, 1fr);
+    gap: 0 0.4rem;
+  }
+
+  .term-tl-node {
+    grid-template-columns: max-content max-content minmax(0, 1fr);
+    padding-block: 0.28rem;
+  }
+
+  .term-tl-meta {
+    grid-area: 2 / 3;
+    padding-left: 0;
+    text-align: left;
+  }
+
+  .term-tl-name {
+    min-width: 0;
+  }
+
+  .term-tl-note {
+    flex-basis: 100%;
+    overflow: visible;
+    white-space: normal;
+  }
+
+  .term-tl-nodes > li + li {
+    border-top: 1px dashed var(--line);
+  }
+
   .term-whoami {
     gap: 0.9rem;
   }
@@ -869,6 +1079,10 @@
   }
 
   .term-window {
+    animation: none;
+  }
+
+  .term-tl-year {
     animation: none;
   }
 }

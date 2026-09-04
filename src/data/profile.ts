@@ -117,7 +117,7 @@ export const PROFILE: Profile = {
     {
       company: 'MoMo · M_Service',
       role: { vi: 'Kỹ sư phần mềm', en: 'Software Engineer' },
-      // from: '2022-01',   ← bỏ dấu comment và điền mốc thật
+      from: '2023-07',
       to: null,
       summary: {
         vi: 'Làm ứng dụng di động đa nền tảng bằng Kotlin Multiplatform và Compose.',

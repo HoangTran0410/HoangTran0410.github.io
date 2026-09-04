@@ -29,7 +29,7 @@ export interface TerminalEntry {
 export const PROMPT = `${PROFILE.name.toLowerCase().replace(/\s+/g, '')}@github ~ $`;
 
 /** Hàng nút gợi ý trên màn hình hẹp, để không ai phải gõ trên bàn phím ảo. */
-export const QUICK_COMMANDS = ['help', 'ls', 'whoami', 'skills', 'contact'];
+export const QUICK_COMMANDS = ['help', 'ls', 'timeline', 'whoami', 'skills', 'contact'];
 
 function commonPrefix(items: string[]): string {
   if (items.length === 0) return '';

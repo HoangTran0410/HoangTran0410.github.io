@@ -40,7 +40,7 @@ describe('Editorial', () => {
 
   it('bấm một dự án thì mở chi tiết có link mã nguồn', async () => {
     renderShell();
-    await userEvent.click(screen.getByRole('button', { name: /^moba2d$/i }));
+    await userEvent.click(screen.getAllByRole('button', { name: /^moba2d$/i })[0]);
     const dialog = await screen.findByRole('dialog');
     const source = within(dialog).getByRole('link', { name: /github/i });
     expect(source.getAttribute('href')).toContain('github.com');
@@ -48,7 +48,7 @@ describe('Editorial', () => {
 
   it('Esc đóng chi tiết', async () => {
     renderShell();
-    await userEvent.click(screen.getByRole('button', { name: /^moba2d$/i }));
+    await userEvent.click(screen.getAllByRole('button', { name: /^moba2d$/i })[0]);
     await screen.findByRole('dialog');
     await userEvent.keyboard('{Escape}');
     expect(screen.queryByRole('dialog')).toBeNull();
@@ -82,6 +82,28 @@ describe('Editorial', () => {
     renderShell();
     expect(screen.getByRole('heading', { name: /skills|kỹ năng/i })).toBeInTheDocument();
     expect(screen.getByText('Claude Code')).toBeInTheDocument();
+  });
+
+  it('có dòng thời gian gom dự án theo năm, và mốc công việc nằm trong đó', () => {
+    renderShell();
+    const timeline = document.getElementById('timeline')!;
+    expect(timeline).toBeTruthy();
+    expect(within(timeline).getByText('MoMo · M_Service')).toBeInTheDocument();
+    // Năm phải giảm dần
+    const years = [...timeline.querySelectorAll('li > div > span')]
+      .map((el) => Number(el.textContent))
+      .filter((n) => Number.isFinite(n) && n > 2000);
+    expect([...years].sort((a, b) => b - a)).toEqual(years);
+  });
+
+  it('lọc thì dòng thời gian co theo, không đứng yên một mình', async () => {
+    renderShell();
+    const timeline = () => document.getElementById('timeline')!;
+    const before = within(timeline()).getAllByRole('button').length;
+    await userEvent.click(
+      screen.getByRole('button', { name: new RegExp(CATEGORY_BY_ID.osint.label.en, 'i') }),
+    );
+    expect(within(timeline()).getAllByRole('button').length).toBeLessThan(before);
   });
 
   it('có nút đổi theme và đổi ngôn ngữ', () => {

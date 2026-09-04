@@ -691,6 +691,182 @@
   background: rgb(20 20 24 / 0.78);
 }
 
+/* ── Dòng thời gian ──────────────────────────────────────────────────── */
+
+/* Một dải chiếm trọn hàng: đúng `cols` ô ở mọi breakpoint nên lưới ngoài không
+   bao giờ lệch nhịp, còn chiều cao thì muốn bao nhiêu cũng được. Bên trong,
+   các thẻ năm chảy qua nhiều cột bằng multi-column — trình duyệt tự cân chiều
+   cao, khỏi phải masonry bằng JS. */
+.bn-timeline {
+  padding: 1.35rem 1.35rem 1.15rem;
+}
+
+.bn-timeline-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.35rem 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.bn-timeline-lede {
+  margin-top: 0.55rem;
+  max-width: 64ch;
+  font-size: 0.88rem;
+  line-height: 1.5;
+  color: var(--ink-muted);
+  text-wrap: pretty;
+}
+
+.bn-timeline-span {
+  color: var(--ink-muted);
+  white-space: nowrap;
+}
+
+.bn-years {
+  margin-top: 1.35rem;
+  list-style: none;
+  padding: 0;
+  columns: 1;
+  column-gap: calc(var(--bn-gap) * 2.2);
+}
+
+@media (min-width: 600px) {
+  .bn-years {
+    columns: 2;
+  }
+}
+
+@media (min-width: 1024px) {
+  .bn-years {
+    columns: 3;
+  }
+}
+
+@media (min-width: 1280px) {
+  .bn-years {
+    columns: 4;
+  }
+}
+
+/* Cột multi-column cắt ngang giữa một năm thì mất hẳn nghĩa "năm này gồm
+   những gì", nên cấm ngắt bên trong thẻ năm. */
+.bn-year {
+  break-inside: avoid;
+  -webkit-column-break-inside: avoid;
+  padding: 0 0 0 1.05rem;
+  margin-bottom: 1.6rem;
+  border-left: 1px solid var(--line);
+  animation: bn-pop 620ms var(--bn-ease) backwards;
+  animation-delay: calc(var(--i, 0) * 24ms);
+}
+
+.bn-year:last-child {
+  margin-bottom: 0;
+}
+
+.bn-year-num {
+  position: relative;
+  font-family: var(--font-display);
+  font-size: 1.85rem;
+  line-height: 1;
+  letter-spacing: -0.025em;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+}
+
+/* Chấm mốc nằm đúng trên đường kẻ dọc bên trái. */
+.bn-year-num::before {
+  content: '';
+  position: absolute;
+  top: 0.5rem;
+  left: calc(-1.05rem - 4px);
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: var(--ink);
+}
+
+/* Mốc công việc/học vấn: có khung, có nền, có sọc accent — cố tình nặng hơn
+   hẳn mấy dòng dự án bên dưới để phân biệt được ngay từ xa. */
+.bn-milestone {
+  margin-top: 0.85rem;
+  padding: 0.65rem 0.8rem;
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--bn-radius-sm);
+  background: var(--surface-2);
+}
+
+.bn-milestone-kind {
+  font-size: 0.62rem;
+  color: var(--ink-muted);
+}
+
+.bn-milestone-name {
+  margin-top: 0.28rem;
+  font-size: 1.22rem;
+  line-height: 1.15;
+  color: var(--ink);
+}
+
+.bn-milestone-role {
+  margin-top: 0.15rem;
+  font-size: 0.82rem;
+  line-height: 1.35;
+  color: var(--ink-muted);
+}
+
+.bn-year-projects {
+  margin-top: 0.7rem;
+  list-style: none;
+  padding: 0;
+}
+
+.bn-year-proj {
+  display: flex;
+  align-items: baseline;
+  gap: 0.55rem;
+  padding: 0.24rem 0;
+}
+
+.bn-year-btn {
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  text-align: left;
+  font-family: var(--font-body);
+  font-size: 0.94rem;
+  line-height: 1.35;
+  color: var(--ink);
+  cursor: pointer;
+  transition: color 200ms var(--bn-ease);
+}
+
+.bn-year-proj:hover .bn-year-btn,
+.bn-year-btn:focus-visible {
+  color: var(--tile-accent, var(--accent));
+}
+
+.bn-year-stars {
+  margin-left: auto;
+  flex: none;
+  color: var(--ink-muted);
+}
+
+@media (max-width: 599px) {
+  .bn-timeline {
+    padding: 1.15rem 1.25rem;
+  }
+
+  .bn-year-num {
+    font-size: 1.6rem;
+  }
+}
+
 /* Ô "chặng đường" thường ngắn hơn ô kỹ năng bên cạnh nhưng phải cao bằng nó
    — căn giữa theo chiều dọc để khoảng trống trông là chủ ý. */
 .bn-tile[data-cell='journey'] {
@@ -742,5 +918,9 @@
   [data-tile='sm']::before {
     transform: scaleX(1);
     opacity: 0.5;
+  }
+
+  .bn-year {
+    animation: none;
   }
 }

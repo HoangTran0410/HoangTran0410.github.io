@@ -8,6 +8,7 @@ import { Identity } from './Identity';
 import { ProjectDetail } from './ProjectDetail';
 import { Stats } from './Stats';
 import { Story } from './Story';
+import { Timeline } from './Timeline';
 import './arcade.css';
 
 export function Shell() {
@@ -55,6 +56,7 @@ export function Shell() {
       <main className="relative mx-auto max-w-[1440px]">
         <Identity />
         <Stats />
+        <Timeline />
         <Catalog />
         <Story />
         <Contact />

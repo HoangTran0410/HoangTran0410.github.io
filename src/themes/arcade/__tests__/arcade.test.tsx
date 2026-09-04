@@ -61,7 +61,7 @@ describe('Arcade', () => {
 
   it('bấm một dự án thì mở chi tiết có link mã nguồn', async () => {
     renderShell();
-    await userEvent.click(screen.getByRole('button', { name: /^moba2d$/i }));
+    await userEvent.click(screen.getAllByRole('button', { name: /^moba2d$/i })[0]);
     const dialog = await screen.findByRole('dialog');
     expect(dialog).toHaveAttribute('aria-modal', 'true');
     const source = within(dialog).getByRole('link', { name: /github/i });
@@ -70,7 +70,7 @@ describe('Arcade', () => {
 
   it('mở chi tiết thì khoá cuộn nền và đưa focus vào nút đóng', async () => {
     renderShell();
-    await userEvent.click(screen.getByRole('button', { name: /^moba2d$/i }));
+    await userEvent.click(screen.getAllByRole('button', { name: /^moba2d$/i })[0]);
     const dialog = await screen.findByRole('dialog');
     expect(document.body.style.overflow).toBe('hidden');
     expect(within(dialog).getByRole('button', { name: /close|đóng/i })).toHaveFocus();
@@ -78,7 +78,7 @@ describe('Arcade', () => {
 
   it('Esc đóng chi tiết và trả focus về card đã bấm', async () => {
     renderShell();
-    const opener = screen.getByRole('button', { name: /^moba2d$/i });
+    const opener = screen.getAllByRole('button', { name: /^moba2d$/i })[0];
     await userEvent.click(opener);
     await screen.findByRole('dialog');
     await userEvent.keyboard('{Escape}');
@@ -105,6 +105,33 @@ describe('Arcade', () => {
     expect(
       screen.getByText(/try another word|thử từ khoá khác/i),
     ).toBeInTheDocument();
+  });
+
+  it('có dòng thời gian, và mốc công việc nằm trong đó', () => {
+    renderShell();
+    const timeline = document.getElementById('timeline')!;
+    expect(timeline).toBeTruthy();
+    expect(within(timeline).getByText('MoMo · M_Service')).toBeInTheDocument();
+  });
+
+  it('các năm trên dòng thời gian giảm dần', () => {
+    renderShell();
+    const timeline = document.getElementById('timeline')!;
+    const years = [...timeline.querySelectorAll('[data-year]')].map((el) =>
+      Number(el.getAttribute('data-year')),
+    );
+    expect(years.length).toBeGreaterThan(1);
+    expect([...years].sort((a, b) => b - a)).toEqual(years);
+  });
+
+  it('lọc theo nhóm thì dòng thời gian co theo, không đứng yên một mình', async () => {
+    renderShell();
+    const timeline = () => document.getElementById('timeline')!;
+    const before = within(timeline()).getAllByRole('button').length;
+    await userEvent.click(
+      screen.getByRole('button', { name: new RegExp(CATEGORY_BY_ID.osint.label.en, 'i') }),
+    );
+    expect(within(timeline()).getAllByRole('button').length).toBeLessThan(before);
   });
 
   it('ẩn hẳn phần học vấn khi chưa điền, thay vì hiện tiêu đề rỗng', () => {

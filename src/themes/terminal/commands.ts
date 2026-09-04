@@ -23,6 +23,8 @@ export type CommandResult =
   /** `category` để Shell đồng bộ ngược lại useCatalog.setCategory */
   | { kind: 'projects'; items: Project[]; category?: CategoryArg }
   | { kind: 'project'; item: Project }
+  /** Mốc nghề nghiệp và dự án gom theo năm — khối tự đọc bộ lọc hiện tại. */
+  | { kind: 'timeline' }
   | { kind: 'profile' }
   | { kind: 'skills' }
   | { kind: 'contact' }
@@ -64,6 +66,14 @@ export const COMMANDS: CommandSpec[] = [
     usage: 'open <slug>',
     about: { vi: 'mở dự án trong cửa sổ chi tiết', en: 'open a project in the detail window' },
     arg: 'slug',
+  },
+  {
+    name: 'timeline',
+    usage: 'timeline',
+    about: {
+      vi: 'đọc theo năm: mốc công việc và dự án (alias: log)',
+      en: 'read by year: career milestones and projects (alias: log)',
+    },
   },
   { name: 'whoami', usage: 'whoami', about: { vi: 'chủ trang này là ai', en: 'who runs this place' } },
   { name: 'stats', usage: 'stats', about: { vi: 'số liệu tổng hợp: sao, fork, số năm', en: 'totals: stars, forks, years' } },
@@ -227,6 +237,13 @@ export function runCommand(input: string, ctx: CommandContext): CommandResult {
         lines: [pick(ctx.locale, `Đang mở ${item.title}…`, `Opening ${item.title}…`)],
       };
     }
+
+    // `log` chứ không phải `history`: trong terminal, `history` là lịch sử
+    // dòng lệnh mà ↑ ↓ đang lật, cướp tên đó là nói dối người dùng. `log` thì
+    // đúng cả nghĩa lẫn hình — khối này vẽ y như `git log --graph`.
+    case 'timeline':
+    case 'log':
+      return { kind: 'timeline' };
 
     case 'whoami':
       return { kind: 'profile' };

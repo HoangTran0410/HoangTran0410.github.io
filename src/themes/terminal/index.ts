@@ -7,15 +7,17 @@ import { ProjectDetail } from './ProjectDetail';
 import { Shell } from './Shell';
 import { Stats } from './Stats';
 import { Story } from './Story';
+import { Timeline } from './Timeline';
 
 /**
- * Sáu khối nội dung ở đây đều là output của một lệnh: whoami, stats, ls,
- * cat/open, skills, contact. Shell là vòng lặp đọc-chạy-in ghép chúng lại.
+ * Bảy khối nội dung ở đây đều là output của một lệnh: whoami, stats, ls,
+ * cat/open, timeline, skills, contact. Shell là vòng lặp đọc-chạy-in ghép
+ * chúng lại.
  */
 const theme: Theme = {
   meta: THEME_META.terminal,
   Shell,
-  sections: { Identity, Stats, Catalog, ProjectDetail, Story, Contact },
+  sections: { Identity, Stats, Catalog, Timeline, ProjectDetail, Story, Contact },
 };
 
 export default theme;

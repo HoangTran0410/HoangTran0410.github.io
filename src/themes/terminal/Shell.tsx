@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import type { MouseEvent } from 'react';
 import { LangSwitcher } from '../../components/LangSwitcher';
 import { ThemeSwitcher } from '../../components/ThemeSwitcher';
@@ -10,6 +11,7 @@ import { Identity } from './Identity';
 import { ProjectCard, ProjectDetail } from './ProjectDetail';
 import { Stats } from './Stats';
 import { Story } from './Story';
+import { Timeline } from './Timeline';
 import { QUICK_COMMANDS, useTerminal } from './useTerminal';
 import type { CommandResult } from './commands';
 import './terminal.css';
@@ -23,8 +25,14 @@ const BANNER = `██╗  ██╗ ██████╗  █████╗ �
 
 const USER = PROFILE.name.toLowerCase().replace(/\s+/g, '');
 
+interface OutputProps {
+  result: CommandResult;
+  /** true nếu đây là khối timeline mới nhất — chỉ nó được mang id="timeline". */
+  anchor?: boolean;
+}
+
 /** Một kết quả lệnh in ra màn hình. Mỗi `kind` là một khối nội dung của theme. */
-function Output({ result }: { result: CommandResult }) {
+function Output({ result, anchor }: OutputProps) {
   switch (result.kind) {
     case 'text':
       return (
@@ -40,6 +48,8 @@ function Output({ result }: { result: CommandResult }) {
       return <Catalog category={result.category} items={result.items} />;
     case 'project':
       return <ProjectCard project={result.item} />;
+    case 'timeline':
+      return <Timeline anchor={anchor} />;
     case 'profile':
       return <Identity />;
     case 'stats':
@@ -59,6 +69,18 @@ export function Shell() {
   const { t, ti } = useI18n();
   const { query, setQuery, projects, all } = useCatalog();
   const term = useTerminal();
+
+  /**
+   * Gõ `timeline` lần nữa là in thêm một khối — nhưng id phải là duy nhất, nên
+   * nó đi theo khối mới nhất và các khối cũ bỏ id lại. `#timeline` vì thế luôn
+   * trỏ đúng một chỗ, và là chỗ vừa in ra.
+   */
+  const liveTimeline = useMemo(() => {
+    for (let i = term.entries.length - 1; i >= 0; i -= 1) {
+      if (term.entries[i].result.kind === 'timeline') return term.entries[i].id;
+    }
+    return -1;
+  }, [term.entries]);
 
   /**
    * Bấm vào chỗ trống trong khung là con trỏ nhảy về dòng lệnh — terminal thật
@@ -131,8 +153,17 @@ export function Shell() {
               {ti({ vi: 'Gõ ', en: 'Type ' })}
               <code className="term-code">help</code>
               {ti({
-                vi: ' để xem mọi lệnh · Tab tự hoàn thành · ↑ ↓ lịch sử',
-                en: ' to see every command · Tab completes · ↑ ↓ history',
+                vi: ' để xem mọi lệnh, hoặc bấm ',
+                en: ' to see every command, or hit ',
+              })}
+              {/* Trên desktop hàng nút gợi ý bị ẩn, nên chữ này là chỗ bấm duy
+                  nhất để gặp timeline mà không phải tự gõ. */}
+              <button type="button" className="term-code term-code-btn" onClick={() => term.run('timeline')}>
+                timeline
+              </button>
+              {ti({
+                vi: ' để đọc theo năm · Tab tự hoàn thành · ↑ ↓ lịch sử',
+                en: ' to read it by year · Tab completes · ↑ ↓ history',
               })}
             </p>
           </>
@@ -143,7 +174,7 @@ export function Shell() {
             <p className="term-echo">
               <span className="term-prompt">{term.prompt}</span> {entry.input}
             </p>
-            <Output result={entry.result} />
+            <Output result={entry.result} anchor={entry.id === liveTimeline} />
           </div>
         ))}
       </div>

@@ -75,7 +75,7 @@ export function Story() {
         <div className="space-y-12">
           {experience.length > 0 && (
             <div>
-              <Heading num="02">{t('story.experience')}</Heading>
+              <Heading num="03">{t('story.experience')}</Heading>
               <ol className="space-y-4">
                 {experience.map((x) => {
                   const range = period(x.from, x.to, t('story.present'));
@@ -115,7 +115,7 @@ export function Story() {
 
           {education.length > 0 && (
             <div>
-              <Heading num="03">{t('story.education')}</Heading>
+              <Heading num="04">{t('story.education')}</Heading>
               <ol className="space-y-3">
                 {education.map((e) => {
                   const range = period(e.from, e.to, t('story.present'));
@@ -137,7 +137,7 @@ export function Story() {
         </div>
 
         <div>
-          <Heading num={education.length > 0 ? '04' : '03'}>{t('story.skills')}</Heading>
+          <Heading num={education.length > 0 ? '05' : '04'}>{t('story.skills')}</Heading>
           <dl className="space-y-6">
             {skills.map((g, i) => (
               <div key={g.label.en} className="ar-in" style={{ '--i': i } as CSSProperties}>

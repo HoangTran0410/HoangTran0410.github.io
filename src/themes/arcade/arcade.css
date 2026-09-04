@@ -737,3 +737,264 @@
   pointer-events: none;
   background: radial-gradient(28rem 16rem at 50% 120%, rgb(124 58 237 / 0.3), transparent 68%);
 }
+
+/* ── Dòng thời gian ─────────────────────────────────────────────────────── */
+
+/* Một trục neon chạy dọc cả khối. Năm và mốc công việc cắm thẳng lên trục,
+   dự án nằm thành lưới ô nhỏ lùi vào trong — thứ bậc nằm ở khoảng cách tới
+   trục chứ không phải ở cỡ chữ. */
+
+.ar-tl {
+  /* --rail: tâm trục tính từ mép trái khối; --pad: khoảng lùi của nội dung */
+  --rail: 0.5rem;
+  --pad: 2.4rem;
+  position: relative;
+}
+
+.ar-tl__list {
+  padding-left: var(--pad);
+}
+
+.ar-tl__rail {
+  position: absolute;
+  top: 0.5rem;
+  bottom: 2.5rem;
+  left: var(--rail);
+  width: 2px;
+  border-radius: 2px;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    color-mix(in oklab, var(--accent) 95%, transparent),
+    color-mix(in oklab, var(--neon-cyan) 50%, transparent) 42%,
+    color-mix(in oklab, var(--accent) 32%, transparent) 84%,
+    transparent
+  );
+  box-shadow: 0 0 18px -2px color-mix(in oklab, var(--accent) 80%, transparent);
+}
+
+/* Vệt sáng chạy từ trên xuống dọc trục — đủ chậm để không cướp mắt người đọc.
+   Chạy background-position chứ không chạy top: một phần tử, không reflow. */
+.ar-tl__pulse {
+  position: absolute;
+  top: 0.5rem;
+  bottom: 2.5rem;
+  left: var(--rail);
+  width: 2px;
+  pointer-events: none;
+  opacity: 0.85;
+  background-image: linear-gradient(
+    to bottom,
+    transparent,
+    color-mix(in oklab, var(--neon-cyan) 92%, transparent) 50%,
+    transparent
+  );
+  background-repeat: no-repeat;
+  background-size: 100% 16%;
+  animation: ar-tl-run 7.5s linear infinite;
+}
+
+@keyframes ar-tl-run {
+  from { background-position: 0 -30%; }
+  to { background-position: 0 130%; }
+}
+
+.ar-tl__year + .ar-tl__year {
+  margin-top: 2.25rem;
+}
+
+.ar-tl__head {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+/* Đầu cắm trên trục. Năm là dấu rỗng nhỏ, mốc công việc là viên đặc phát sáng. */
+.ar-tl__node {
+  position: absolute;
+  top: 50%;
+  left: calc(var(--rail) + 1px - var(--pad));
+  width: 9px;
+  height: 9px;
+  transform: translate(-50%, -50%) rotate(45deg);
+  border: 1.5px solid color-mix(in oklab, var(--accent) 85%, transparent);
+  background: var(--bg);
+  box-shadow: 0 0 12px -1px color-mix(in oklab, var(--accent) 85%, transparent);
+}
+
+.ar-tl__node--big {
+  top: 2rem;
+  width: 15px;
+  height: 15px;
+  border-width: 2px;
+  border-color: color-mix(in oklab, var(--accent) 45%, #fff);
+  background: var(--accent);
+  box-shadow:
+    0 0 0 4px color-mix(in oklab, var(--accent) 15%, transparent),
+    0 0 26px 2px color-mix(in oklab, var(--accent) 80%, transparent);
+}
+
+.ar-tl__node--big::after {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  border: 1px solid color-mix(in oklab, var(--accent) 65%, transparent);
+  animation: ar-tl-ping 3.2s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+@keyframes ar-tl-ping {
+  0% { opacity: 0.75; transform: scale(0.55); }
+  70%, 100% { opacity: 0; transform: scale(1.5); }
+}
+
+/* Con số năm nằm trong khung HUD có ngoặc góc — đệm rộng để hai cái ngoặc
+   không cắt vào chữ số. */
+.ar-tl__stamp {
+  flex: none;
+  padding: 0.62rem 1.05rem 0.58rem;
+  font-size: clamp(1.3rem, 4.4vw, 1.7rem);
+  line-height: 1;
+  color: var(--ink);
+  text-shadow: 0 0 24px color-mix(in oklab, var(--accent) 55%, transparent);
+}
+
+.ar-tl__count {
+  flex: none;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-muted);
+}
+
+.ar-tl__count::before {
+  content: '×';
+  margin-right: 0.15em;
+  opacity: 0.55;
+}
+
+.ar-tl__milestones {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+/* Không kéo hết chiều ngang: một tấm bảng rộng gần 1300px cho ba dòng chữ thì
+   hai cái ngoặc góc lạc mất nhau, mà mắt cũng phải đi quá xa từ tên tới mốc. */
+.ar-tl__milestone {
+  position: relative;
+  max-width: 46rem;
+}
+
+.ar-tl__kind {
+  color: color-mix(in oklab, var(--accent) 42%, var(--ink));
+}
+
+.ar-tl__company {
+  color: var(--ink);
+  text-shadow: 0 0 26px color-mix(in oklab, var(--accent) 45%, transparent);
+}
+
+.ar-tl__slots {
+  display: grid;
+  gap: 0.3rem;
+  margin-top: 0.9rem;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+@media (min-width: 1024px) {
+  .ar-tl__slots {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 1.1rem;
+  }
+}
+
+.ar-tl__slot {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  min-width: 0;
+  padding: 0.42rem 0.7rem;
+  border: 1px solid transparent;
+  border-radius: 9px;
+  transition: background-color 200ms ease, border-color 200ms ease, box-shadow 240ms ease;
+}
+
+.ar-tl__slot:hover,
+.ar-tl__slot:focus-within {
+  border-color: color-mix(in oklab, var(--slot-accent) 40%, var(--line));
+  background: color-mix(in oklab, var(--slot-accent) 9%, transparent);
+  box-shadow: 0 0 28px -14px var(--slot-accent);
+}
+
+.ar-tl__dot {
+  flex: none;
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--slot-accent);
+  box-shadow: 0 0 9px color-mix(in oklab, var(--slot-accent) 90%, transparent);
+}
+
+.ar-tl__title {
+  flex: none;
+  max-width: 100%;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 0.98rem;
+  line-height: 1.25;
+  color: var(--ink);
+  text-align: left;
+  transition: color 200ms ease, text-shadow 200ms ease;
+}
+
+/* Cả ô bấm được, nhưng tên vẫn là <button> duy nhất và tên đó đúng bằng
+   title của dự án — không nhồi thêm chữ nào vào nhãn. */
+.ar-tl__title::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.ar-tl__slot:hover .ar-tl__title,
+.ar-tl__title:focus-visible {
+  color: color-mix(in oklab, var(--slot-accent) 58%, var(--ink));
+  text-shadow: 0 0 18px color-mix(in oklab, var(--slot-accent) 70%, transparent);
+}
+
+/* Dưới 640px thì bỏ câu mô tả: một dòng tên gọn còn đọc được, tên + mô tả bị
+   ép chung một dòng hẹp thì chẳng đọc được cái nào. */
+.ar-tl__tagline {
+  display: none;
+}
+
+@media (min-width: 640px) {
+  .ar-tl__tagline {
+    display: block;
+    min-width: 0;
+    flex: 1;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-size: 0.85rem;
+    color: var(--ink-muted);
+  }
+}
+
+.ar-tl__stars {
+  flex: none;
+  margin-left: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ar-tl__pulse,
+  .ar-tl__node--big::after {
+    animation: none;
+  }
+
+  .ar-tl__node--big::after {
+    display: none;
+  }
+}

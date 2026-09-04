@@ -8,12 +8,14 @@ import { Identity } from './Identity';
 import { ProjectDetail } from './ProjectDetail';
 import { Stats } from './Stats';
 import { Story } from './Story';
+import { Timeline } from './Timeline';
 import './bento.css';
 
 /**
  * Một lưới duy nhất cho toàn trang. Mỗi section trả về các ô rời (Fragment),
  * nên chúng trở thành con trực tiếp của .bn-grid và cùng chịu một luật xếp:
- * identity → số liệu → thanh lọc → dự án → kỹ năng/chặng đường → liên hệ.
+ * identity → số liệu → thanh lọc → dự án → dòng thời gian → kỹ năng/chặng
+ * đường → liên hệ.
  * Trên mobile lưới co về một cột, và đúng thứ tự ưu tiên đó luôn.
  */
 export function Shell() {
@@ -51,6 +53,7 @@ export function Shell() {
           <Identity />
           <Stats />
           <Catalog />
+          <Timeline />
           <Story />
           <Contact />
         </div>

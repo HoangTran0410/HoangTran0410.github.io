@@ -99,7 +99,7 @@ export function Catalog() {
     <section id="work" className="px-[var(--gutter)] pb-20">
       <div className="mb-5 flex items-center gap-4">
         <h2 className="ar-display flex items-baseline gap-3 text-xl sm:text-2xl">
-          <span className="ar-num text-xs text-accent">01</span>
+          <span className="ar-num text-xs text-accent">02</span>
           {t('nav.work')}
         </h2>
         <span aria-hidden className="ar-heading-rule" />

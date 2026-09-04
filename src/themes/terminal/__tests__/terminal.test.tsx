@@ -27,6 +27,13 @@ function lastEntry(container: HTMLElement): HTMLElement {
   return blocks[blocks.length - 1];
 }
 
+/** Khối timeline đang mang id — theo hợp đồng, luôn có đúng một. */
+function timelineBlock(container: HTMLElement): HTMLElement {
+  const blocks = container.querySelectorAll<HTMLElement>('#timeline');
+  expect(blocks).toHaveLength(1);
+  return blocks[0];
+}
+
 beforeEach(() => {
   localStorage.clear();
   window.history.replaceState({}, '', '/');
@@ -201,5 +208,78 @@ describe('Terminal', () => {
     renderShell();
     await type('theme editorial');
     expect(localStorage.getItem('theme')).toBe('editorial');
+  });
+});
+
+describe('timeline', () => {
+  it('gõ `timeline` thì in ra #timeline có mốc công việc thật', async () => {
+    const { container } = renderShell();
+    await type('timeline');
+
+    expect(lastEntry(container)).toHaveAttribute('data-cmd', 'timeline');
+    expect(timelineBlock(container)).toHaveTextContent('MoMo · M_Service');
+  });
+
+  it('các năm giảm dần', async () => {
+    const { container } = renderShell();
+    await type('timeline');
+
+    const years = [...timelineBlock(container).querySelectorAll<HTMLElement>('[data-year]')].map((el) =>
+      Number(el.dataset.year),
+    );
+    expect(years.length).toBeGreaterThan(1);
+    for (let i = 1; i < years.length; i += 1) expect(years[i]).toBeLessThan(years[i - 1]);
+  });
+
+  it('lọc rồi thì timeline co lại theo — nó đọc bộ lọc chung chứ không đóng băng', async () => {
+    const { container } = renderShell();
+    await type('timeline');
+    const before = within(timelineBlock(container)).getAllByRole('button').length;
+
+    await userEvent.type(screen.getByRole('searchbox'), 'moba');
+
+    const after = within(timelineBlock(container)).getAllByRole('button').length;
+    expect(after).toBeGreaterThan(0);
+    expect(after).toBeLessThan(before);
+  });
+
+  it('gõ nhiều lần thì id chỉ nằm trên khối mới nhất', async () => {
+    const { container } = renderShell();
+    await type('timeline');
+    await type('timeline');
+    await type('timeline');
+
+    expect(container.querySelectorAll('.term-timeline')).toHaveLength(3);
+    expect(document.querySelectorAll('#timeline')).toHaveLength(1);
+    expect(document.getElementById('timeline')).toBe(lastEntry(container).querySelector('.term-timeline'));
+  });
+
+  it('Tab hoàn thành `time` thành `timeline`', async () => {
+    renderShell();
+    await userEvent.type(commandLine(), 'time');
+    await userEvent.keyboard('{Tab}');
+    expect(commandLine()).toHaveValue('timeline');
+  });
+
+  it('gặp được timeline mà không cần gõ: nút gợi ý trên mobile, và dòng hint đầu trang', async () => {
+    const { container } = renderShell();
+
+    const hint = container.querySelector<HTMLElement>('.term-hint')!;
+    expect(within(hint).getByRole('button', { name: 'timeline' })).toBeInTheDocument();
+
+    const quick = container.querySelector<HTMLElement>('.term-quick')!;
+    await userEvent.click(within(quick).getByRole('button', { name: 'timeline' }));
+
+    expect(lastEntry(container)).toHaveAttribute('data-cmd', 'timeline');
+    expect(timelineBlock(container)).toBeInTheDocument();
+  });
+
+  it('bấm tên dự án trong timeline mở đúng cửa sổ chi tiết', async () => {
+    const { container } = renderShell();
+    await type('timeline');
+
+    await userEvent.click(within(timelineBlock(container)).getByRole('button', { name: 'moba2d' }));
+    const dialog = await screen.findByRole('dialog');
+    expect(within(dialog).getByRole('heading', { name: 'moba2d' })).toBeInTheDocument();
   });
 });

@@ -27,6 +27,8 @@ export interface ThemeSections {
   Stats: ComponentType;
   /** Bộ lọc, ô tìm kiếm và danh sách dự án */
   Catalog: ComponentType;
+  /** Mốc nghề nghiệp và dự án gom theo năm, mới nhất lên đầu */
+  Timeline: ComponentType;
   /** Chi tiết một dự án — modal, panel, hay output tuỳ theme */
   ProjectDetail: ComponentType;
   /** Kinh nghiệm, học vấn, kỹ năng */
