@@ -13,7 +13,7 @@ gì về giao diện — nhờ vậy thêm theme thứ năm không phải đụn
 ```
 src/data/     thuần TypeScript, 0 React   projects · profile · categories · github.generated.json
 src/lib/      hàm thuần                   merge · stats · normalize · gradient
-src/hooks/    headless, không có JSX riêng useI18n · useCatalog · useTheme · useProjectDetail
+src/hooks/    headless, không có JSX riêng useI18n · useCatalog · useTheme · useProjectDetail · useTimeline
 src/themes/   4 renderer độc lập          editorial · arcade · bento · terminal
 ```
 
@@ -21,9 +21,20 @@ Toàn bộ state (ngôn ngữ, bộ lọc, ô tìm kiếm, dự án đang mở) 
 đặt **ngoài** theme. Đổi theme không mất gì — đây là bất biến trung tâm, và có
 test canh nó ở `src/hooks/__tests__/state-preservation.test.tsx`.
 
-Mỗi theme phải phủ đủ sáu khối nội dung (`Identity`, `Stats`, `Catalog`,
-`ProjectDetail`, `Story`, `Contact`). Thiếu một khối là TypeScript báo lỗi, nên
-không có chuyện đổi theme rồi mất thông tin.
+Mỗi theme phải phủ đủ bảy khối nội dung: `Identity`, `Stats`, `Catalog`,
+`Timeline`, `ProjectDetail`, `Story`, `Contact`. Thiếu một khối là TypeScript
+báo lỗi, nên không có chuyện đổi theme rồi mất thông tin.
+
+Nhưng hình dạng đúng chưa đủ. Đã từng có bốn theme stub `Shell: () => null`
+thoả contract hoàn hảo mà bấm vào là trắng màn hình — không lỗi TypeScript,
+không lỗi console, và vì lựa chọn theme nằm trong `localStorage` nên reload
+cũng trắng, không có nút nào để thoát ra. Từ đó `src/themes/__tests__/contract.test.tsx`
+render thật từng theme và đòi: có nội dung, cho biết đây là trang của ai, liệt kê
+dự án, và có nút đổi sang theme khác.
+
+**Cái giá của thiết kế này**: thêm một khối nội dung mới nghĩa là viết nó bốn
+lần. Đổi lại, không bao giờ có chuyện một theme lặng lẽ thiếu thông tin mà
+không ai biết.
 
 ## Chạy
 
@@ -40,6 +51,7 @@ npm run build
 | Muốn đổi gì | Sửa file nào |
 |---|---|
 | Thêm/bớt dự án, đổi mô tả | `src/data/projects.ts` |
+| Đánh dấu dự án không dùng ảnh chụp | `shot: null` trong `src/data/projects.ts` |
 | Kinh nghiệm, học vấn, kỹ năng, liên hệ | `src/data/profile.ts` |
 | Nhóm dự án và màu của nhóm | `src/data/categories.ts` |
 | Chữ trên giao diện (nút, nhãn) | `src/i18n/strings.ts` |
