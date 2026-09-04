@@ -1,6 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import { PROJECTS } from '../projects';
 import { CATEGORY_BY_ID } from '../categories';
+import rawStats from '../github.generated.json';
+import type { GithubStats } from '../types';
+
+const STATS = rawStats as Record<string, GithubStats>;
 
 describe('projects curated', () => {
   it('có ít nhất 40 mục', () => {
@@ -61,6 +65,34 @@ describe('projects curated', () => {
       expect(p.year, p.slug).toBeGreaterThanOrEqual(2018);
       expect(p.year, p.slug).toBeLessThanOrEqual(new Date().getFullYear());
     }
+  });
+
+  /**
+   * Chuyện đã xảy ra thật: năm repo trong danh sách hoá ra là fork của người
+   * khác, có cái không một dòng nào là của chủ trang. Soi tay từng cái thì bỏ
+   * sót — lần đầu bỏ sót đúng một cái. Nên `npm run sync` giờ ghi lại tình
+   * trạng fork và số commit của chủ trang, còn chỗ này gác.
+   *
+   * Repo chưa sync thì bỏ qua: chưa biết thì đừng vu oan.
+   */
+  it('không có repo fork nào mà chủ trang không viết dòng nào', () => {
+    const stolen = PROJECTS.filter((p) => {
+      const s = p.repo ? STATS[p.repo] : undefined;
+      return s?.ok && s.fork && s.myCommits === 0;
+    }).map((p) => `${p.slug} (fork của ${STATS[p.repo!].parent})`);
+
+    expect(stolen, 'fork mà không đóng góp gì thì không phải tác phẩm của mình').toEqual([]);
+  });
+
+  it('repo fork có đóng góp thì phải nói rõ là fork trong phần mô tả', () => {
+    const unlabelled = PROJECTS.filter((p) => {
+      const s = p.repo ? STATS[p.repo] : undefined;
+      if (!s?.ok || !s.fork || s.myCommits <= 0) return false;
+      const prose = `${p.blurb.vi} ${p.blurb.en} ${p.tagline.vi} ${p.tagline.en}`.toLowerCase();
+      return !prose.includes('fork');
+    }).map((p) => p.slug);
+
+    expect(unlabelled, 'giữ fork thì được, nhưng phải nói rõ nó là fork').toEqual([]);
   });
 
   it('category nào cũng có ít nhất một dự án, để không hiện nhóm rỗng', () => {

@@ -95,6 +95,21 @@ GITHUB_TOKEN=$(gh auth token) npm run sync
 Một repo lỗi không làm hỏng cả lần sync: entry cũ được giữ lại và đánh dấu
 `ok: false`.
 
+### Gác chuyện nhận vơ
+
+Trong 206 repo public có gần một nửa là fork. Vài cái trong đó trông y như dự
+án riêng — cùng tên miền demo, mô tả chỉn chu — nhưng chủ repo không viết dòng
+nào. Soi tay thì bỏ sót, nên việc này được tự động hoá hai tầng:
+
+- `npm run sync` ghi lại `fork`, `parent` và `myCommits` (số commit do chủ trang
+  viết), rồi in cảnh báo cho mọi fork còn nằm trong danh sách.
+- `src/data/__tests__/projects.test.ts` **đỏ** nếu có repo fork mà `myCommits`
+  bằng 0, và cũng đỏ nếu một fork có đóng góp thật nhưng phần mô tả không nói
+  rõ nó là fork.
+
+Muốn giữ một fork mình có sửa thì cứ giữ — chỉ cần viết chữ "fork" vào `blurb`
+hoặc `tagline`.
+
 ## Ảnh thumbnail
 
 ```bash

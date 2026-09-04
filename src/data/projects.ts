@@ -727,24 +727,6 @@ export const PROJECTS: CuratedProject[] = [
     status: 'archived',
   },
   {
-    slug: 'linear-ability-three',
-    repo: 'HoangTran0410/LinearAbiltyCastingThreeJS',
-    title: 'Linear Ability Casting',
-    tagline: {
-      vi: 'Thử nghiệm hiệu ứng tung chiêu theo đường thẳng bằng Three.js',
-      en: 'A Three.js study of linear ability-casting effects',
-    },
-    blurb: {
-      vi: 'Thử xem hiệu ứng chiêu thức kiểu MOBA sẽ trông thế nào khi đưa lên không gian ba chiều — chỉ điểm ngắm, đường bay, và tác động khi trúng.',
-      en: 'An experiment in what MOBA-style ability effects look like in three dimensions — the indicator, the travel, and the impact.',
-    },
-    category: 'creative',
-    tags: ['TypeScript', 'Three.js', 'WebGL', 'VFX'],
-    links: { repo: 'https://github.com/HoangTran0410/LinearAbiltyCastingThreeJS' },
-    year: 2026,
-    status: 'archived',
-  },
-  {
     slug: 'qr-jigsaw',
     repo: 'HoangTran0410/qr-jigsaw',
     title: 'QR Jigsaw',

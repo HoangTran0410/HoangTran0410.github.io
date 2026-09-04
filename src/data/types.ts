@@ -73,6 +73,15 @@ export interface GithubStats {
   pushedAt: string;
   topics: string[];
   archived: boolean;
+  /** Repo này là fork của người khác */
+  fork: boolean;
+  /** "owner/name" của repo gốc, null nếu không phải fork */
+  parent: string | null;
+  /**
+   * Số commit do chủ trang viết (đếm tối đa 100). Chỉ cần biết 0 hay khác 0:
+   * một fork mà chủ trang không viết dòng nào thì không phải tác phẩm của mình.
+   */
+  myCommits: number;
   /** false nếu lần sync gần nhất gọi API repo này bị lỗi; dữ liệu bên trên là của lần sync cũ */
   ok: boolean;
 }
