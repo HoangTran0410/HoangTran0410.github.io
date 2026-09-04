@@ -1,0 +1,97 @@
+/* Ctrl+P trên theme Editorial ra một bản CV sạch, khỏi phải nuôi một file PDF
+   riêng lúc nào cũng lỗi thời. */
+
+@media print {
+  @page {
+    size: A4;
+    margin: 14mm 14mm 16mm;
+  }
+
+  /* Bỏ mọi thứ chỉ có nghĩa khi tương tác được */
+  [data-print='hide'],
+  .ed-plate,
+  .ed-portrait ~ *:empty {
+    display: none !important;
+  }
+
+  html,
+  body {
+    background: #fff !important;
+    color: #000 !important;
+  }
+
+  body::after {
+    display: none !important; /* lớp grain */
+  }
+
+  .ed-shell {
+    --gutter: 0;
+  }
+
+  .ed-reveal,
+  .ed-rule {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .ed-name {
+    font-size: 30pt !important;
+    line-height: 1 !important;
+  }
+
+  .ed-display {
+    font-size: inherit;
+  }
+
+  main {
+    max-width: none !important;
+  }
+
+  section {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  /* Ép về một cột: bản in không có chỗ cho lưới */
+  .grid {
+    display: block !important;
+  }
+
+  header,
+  .sticky {
+    position: static !important;
+    background: none !important;
+    backdrop-filter: none !important;
+  }
+
+  /* Bản in chỉ giữ những dự án đang hiện trên màn hình; muốn in gọn hơn thì
+     lọc bớt trước khi bấm in. */
+  article {
+    break-inside: avoid;
+    page-break-inside: avoid;
+    padding: 6pt 0 !important;
+  }
+
+  h1,
+  h2,
+  h3 {
+    break-after: avoid;
+    page-break-after: avoid;
+  }
+
+  /* Giấy in không bấm được, nên in kèm địa chỉ */
+  a[href^='http']::after {
+    content: ' (' attr(href) ')';
+    font-family: var(--font-mono);
+    font-size: 7pt;
+    color: #444;
+    word-break: break-all;
+  }
+
+  /* Trừ những link mà URL đã hiện sẵn ngay cạnh */
+  .ed-shell footer a[href^='http']::after,
+  h1 a[href^='http']::after {
+    content: '';
+  }
+}

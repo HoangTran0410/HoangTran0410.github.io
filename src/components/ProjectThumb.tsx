@@ -35,6 +35,8 @@ export function ProjectThumb({ project, ratio = '8 / 5', className, eager }: Pro
     );
   }
 
+  // Không có ảnh thật thì dựng một tấm bìa: gradient tất định theo slug, phủ
+  // tên dự án. Nhìn có chủ ý hơn hẳn một ô màu trống.
   return (
     <div
       data-fallback="gradient"
@@ -44,8 +46,42 @@ export function ProjectThumb({ project, ratio = '8 / 5', className, eager }: Pro
       style={{
         aspectRatio: ratio,
         width: '100%',
+        display: 'grid',
+        alignContent: 'end',
+        gap: '0.15em',
+        padding: '6%',
+        overflow: 'hidden',
+        containerType: 'inline-size',
         background: gradientFor(project.slug, project.categoryMeta.accent),
       }}
-    />
+    >
+      <span
+        aria-hidden
+        style={{
+          fontFamily: 'var(--font-meta)',
+          fontSize: 'clamp(0.5rem, 1.5cqw, 0.7rem)',
+          letterSpacing: '0.18em',
+          textTransform: 'uppercase',
+          color: 'rgb(255 255 255 / 0.72)',
+        }}
+      >
+        {project.categoryMeta.label.en}
+      </span>
+      <span
+        aria-hidden
+        style={{
+          fontFamily: 'var(--font-display)',
+          fontSize: 'clamp(1.15rem, 7cqw, 2.6rem)',
+          lineHeight: 1.02,
+          fontWeight: 600,
+          letterSpacing: '-0.02em',
+          color: '#fff',
+          textShadow: '0 1px 24px rgb(0 0 0 / 0.28)',
+          textWrap: 'balance',
+        }}
+      >
+        {project.title}
+      </span>
+    </div>
   );
 }

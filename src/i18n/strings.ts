@@ -25,6 +25,8 @@ export const STRINGS = {
   'detail.next': { vi: 'Dự án sau', en: 'Next project' },
   'detail.prev': { vi: 'Dự án trước', en: 'Previous project' },
   'detail.tech': { vi: 'Công nghệ', en: 'Built with' },
+  'detail.year': { vi: 'Năm', en: 'Year' },
+  'detail.language': { vi: 'Ngôn ngữ chính', en: 'Main language' },
 
   'stats.stars': { vi: 'sao trên GitHub', en: 'GitHub stars' },
   'stats.projects': { vi: 'dự án công khai', en: 'public projects' },
