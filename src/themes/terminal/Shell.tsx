@@ -66,8 +66,8 @@ function Output({ result, anchor }: OutputProps) {
 }
 
 export function Shell() {
-  const { t, ti } = useI18n();
-  const { query, setQuery, projects, all } = useCatalog();
+  const { ti } = useI18n();
+  const { query, all } = useCatalog();
   const term = useTerminal();
 
   /**
@@ -104,31 +104,23 @@ export function Shell() {
           <i />
         </span>
 
+        {/* Trên màn hình hẹp chỉ còn `hoangtran@github` — dấu hai chấm đi theo
+            đường dẫn, không thì nó đứng lại một mình ở cuối câu. */}
         <h1 className="term-titlebar">
           {USER}
-          <span className="term-dim">@github: </span>~/portfolio
+          <span className="term-dim">@github</span>
+          <span className="term-titlebar-path">
+            <span className="term-dim">: </span>~/portfolio
+          </span>
         </h1>
 
-        <label className="term-search">
-          <span className="sr-only">{t('search.label')}</span>
-          <span className="term-dim" aria-hidden>
-            grep
-          </span>
-          <input
-            type="search"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder={t('search.placeholder')}
-            spellCheck={false}
-            autoComplete="off"
-          />
-          <span className="term-dim term-count" aria-hidden>
-            {projects.length}/{all.length}
-          </span>
-        </label>
-
-        <LangSwitcher className="term-lang" />
-        <ThemeSwitcher />
+        {/* Bên trái là tên cửa sổ, bên phải là điều khiển — như thanh tiêu đề
+            của một cửa sổ terminal thật. Tìm kiếm không ở đây nữa: đã gõ được
+            lệnh thì `grep` làm việc đó, và thanh này khỏi chật. */}
+        <div className="term-bar-actions">
+          <LangSwitcher className="term-lang" />
+          <ThemeSwitcher />
+        </div>
       </header>
 
       <div
@@ -153,8 +145,13 @@ export function Shell() {
               {ti({ vi: 'Gõ ', en: 'Type ' })}
               <code className="term-code">help</code>
               {ti({
-                vi: ' để xem mọi lệnh, hoặc bấm ',
-                en: ' to see every command, or hit ',
+                vi: ' để xem mọi lệnh, ',
+                en: ' to see every command, ',
+              })}
+              <code className="term-code">{ti({ vi: 'grep <chữ>', en: 'grep <text>' })}</code>
+              {ti({
+                vi: ' để lọc danh sách, hoặc bấm ',
+                en: ' to filter the list, or hit ',
               })}
               {/* Trên desktop hàng nút gợi ý bị ẩn, nên chữ này là chỗ bấm duy
                   nhất để gặp timeline mà không phải tự gõ. */}
@@ -166,6 +163,19 @@ export function Shell() {
                 en: ' to read it by year · Tab completes · ↑ ↓ history',
               })}
             </p>
+
+            {/* `?q=` đi theo người dùng từ theme khác sang. Không nói ra thì họ
+                mở lên thấy thiếu dự án và tưởng là mất. */}
+            {query && (
+              <p className="term-hint term-filter">
+                {ti({ vi: 'Đang lọc: ', en: 'Filter on: ' })}
+                <code className="term-code">grep {query}</code>
+                {ti({
+                  vi: ' — gõ `grep` không kèm gì để xoá.',
+                  en: ' — type `grep` with no argument to clear it.',
+                })}
+              </p>
+            )}
           </>
         )}
 
@@ -182,8 +192,8 @@ export function Shell() {
       <form className="term-composer" onSubmit={term.submit}>
         <div className="term-quick">
           {QUICK_COMMANDS.map((c) => (
-            <button key={c} type="button" className="term-quick-btn" onClick={() => term.run(c)}>
-              {c}
+            <button key={c} type="button" className="term-quick-btn" onClick={() => term.quick(c)}>
+              {c.trim()}
             </button>
           ))}
         </div>
@@ -212,7 +222,7 @@ export function Shell() {
         </div>
       </form>
 
-      <ProjectDetail />
+      <ProjectDetail restoreFocus={term.focusInput} />
     </div>
   );
 }

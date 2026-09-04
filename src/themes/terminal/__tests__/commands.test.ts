@@ -5,20 +5,24 @@ import type { Locale } from '../../../data/types';
 import {
   COMMAND_NAMES,
   levenshtein,
+  matchProjects,
   runCommand,
   suggestSlugs,
+  type CategoryArg,
   type CommandContext,
 } from '../commands';
 
 const PROJECTS = getProjects();
 
-function makeCtx(locale: Locale = 'en') {
+function makeCtx(locale: Locale = 'en', category: CategoryArg = 'all') {
   const ctx: CommandContext = {
     projects: PROJECTS,
     profile: PROFILE,
     locale,
+    category,
     setTheme: vi.fn(),
     setLocale: vi.fn(),
+    setQuery: vi.fn(),
     open: vi.fn(),
     clear: vi.fn(),
   };
@@ -67,6 +71,13 @@ describe('help', () => {
     expect(result.lines.join('\n')).toMatch(/timeline/);
   });
 
+  it('nhắc lệnh grep — ô tìm kiếm đã bỏ, đây là chỗ duy nhất tìm ra nó', () => {
+    const result = runCommand('help', makeCtx());
+    expect(result.kind).toBe('text');
+    if (result.kind !== 'text') return;
+    expect(result.lines.join('\n')).toMatch(/grep/);
+  });
+
   it('nói tiếng Việt khi locale là vi', () => {
     const result = runCommand('help', makeCtx('vi'));
     expect(result.kind).toBe('text');
@@ -108,6 +119,69 @@ describe('ls', () => {
     expect(result.message).toMatch(/products/);
     expect(result.message).toMatch(/osint/);
     expect(result.message).toMatch(/archive/);
+  });
+});
+
+describe('grep', () => {
+  it('grep moba đẩy chữ cần tìm vào bộ lọc chung', () => {
+    const ctx = makeCtx();
+    const result = runCommand('grep moba', ctx);
+    expect(ctx.setQuery).toHaveBeenCalledWith('moba');
+    expect(result.kind).toBe('text');
+  });
+
+  it('không tham số thì XOÁ bộ lọc, và nói rõ là đã xoá', () => {
+    const ctx = makeCtx();
+    const result = runCommand('grep', ctx);
+    expect(ctx.setQuery).toHaveBeenCalledWith('');
+    expect(result.kind).toBe('text');
+    if (result.kind !== 'text') return;
+    expect(result.lines.join(' ')).toMatch(/cleared/i);
+  });
+
+  it('in ra số dự án khớp trên tổng số', () => {
+    const ctx = makeCtx();
+    const hits = matchProjects('moba', PROJECTS).length;
+    expect(hits).toBeGreaterThan(0);
+    expect(hits).toBeLessThan(PROJECTS.length);
+
+    const result = runCommand('grep moba', ctx);
+    if (result.kind !== 'text') return;
+    expect(result.lines[0]).toContain(`${hits}/${PROJECTS.length}`);
+  });
+
+  it('không khớp gì thì chỉ luôn cách xoá bộ lọc, đừng để người dùng kẹt', () => {
+    const result = runCommand('grep zzzzkhongcogi', makeCtx());
+    if (result.kind !== 'text') return;
+    expect(result.lines[0]).toContain('0/');
+    expect(result.lines.join(' ')).toMatch(/grep/);
+  });
+
+  it('đếm trong phạm vi nhóm đang lọc, không phải toàn bộ danh sách', () => {
+    const games = PROJECTS.filter((p) => p.category === 'games').length;
+    const result = runCommand('grep e', makeCtx('en', 'games'));
+    if (result.kind !== 'text') return;
+    expect(result.lines[0]).toContain(`/${games} projects`);
+  });
+
+  it('giữ nguyên hoa thường người gõ — so khớp đã normalize rồi', () => {
+    const ctx = makeCtx();
+    runCommand('grep MoBa 2D', ctx);
+    expect(ctx.setQuery).toHaveBeenCalledWith('MoBa 2D');
+  });
+
+  it('`/moba` là alias, viết liền hay tách ra đều được', () => {
+    const a = makeCtx();
+    runCommand('/moba', a);
+    expect(a.setQuery).toHaveBeenCalledWith('moba');
+
+    const b = makeCtx();
+    runCommand('/ moba', b);
+    expect(b.setQuery).toHaveBeenCalledWith('moba');
+  });
+
+  it('Tab hoàn thành `gr` → `grep`: chỉ đúng một lệnh khớp tiền tố', () => {
+    expect(COMMAND_NAMES.filter((n) => n.startsWith('gr'))).toEqual(['grep']);
   });
 });
 

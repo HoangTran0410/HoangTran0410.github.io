@@ -28,8 +28,12 @@ export interface TerminalEntry {
 /** hoangtran@github ~ $ — dựng từ profile chứ không viết cứng. */
 export const PROMPT = `${PROFILE.name.toLowerCase().replace(/\s+/g, '')}@github ~ $`;
 
-/** Hàng nút gợi ý trên màn hình hẹp, để không ai phải gõ trên bàn phím ảo. */
-export const QUICK_COMMANDS = ['help', 'ls', 'timeline', 'whoami', 'skills', 'contact'];
+/**
+ * Hàng nút gợi ý trên màn hình hẹp, để không ai phải gõ trên bàn phím ảo.
+ * Chuỗi kết thúc bằng dấu cách là lệnh còn thiếu tham số: bấm vào thì điền sẵn
+ * vào ô nhập chứ không chạy ngay.
+ */
+export const QUICK_COMMANDS = ['help', 'ls', 'grep ', 'timeline', 'whoami', 'skills', 'contact'];
 
 function commonPrefix(items: string[]): string {
   if (items.length === 0) return '';
@@ -51,8 +55,10 @@ function bootEntries(projects: Project[], profile: Profile, locale: Locale, cate
     projects,
     profile,
     locale,
+    category,
     setTheme: () => {},
     setLocale: () => {},
+    setQuery: () => {},
     open: () => {},
     clear: () => {},
   };
@@ -61,7 +67,7 @@ function bootEntries(projects: Project[], profile: Profile, locale: Locale, cate
 }
 
 export function useTerminal() {
-  const { all, category, setCategory } = useCatalog();
+  const { all, category, setCategory, setQuery } = useCatalog();
   const { locale, setLocale } = useI18n();
   const { setTheme } = useTheme();
   const { open } = useProjectDetail();
@@ -83,13 +89,21 @@ export function useTerminal() {
     setEntries((prev) => [...prev, { id: nextId.current++, input, result }]);
   }, []);
 
+  /**
+   * Ở theme này ô nhập là chỗ duy nhất người dùng cần đứng, nên tiêu điểm luôn
+   * được kéo về đây. preventScroll để việc kéo đó không giật màn hình đang cuộn.
+   */
+  const focusInput = useCallback(() => inputRef.current?.focus({ preventScroll: true }), []);
+
   const ctx = useMemo<CommandContext>(
     () => ({
       projects: all,
       profile: PROFILE,
       locale,
+      category,
       setTheme,
       setLocale,
+      setQuery,
       open,
       clear: () => {
         setEntries([]);
@@ -97,7 +111,7 @@ export function useTerminal() {
         if (scrollRef.current) scrollRef.current.scrollTop = 0;
       },
     }),
-    [all, locale, setTheme, setLocale, open],
+    [all, locale, category, setTheme, setLocale, setQuery, open],
   );
 
   const run = useCallback(
@@ -114,8 +128,25 @@ export function useTerminal() {
       if (result.kind === 'projects' && result.category) setCategory(result.category);
       // noop = dòng trống hoặc `clear`; cả hai đều không để lại vết trên màn hình.
       if (result.kind !== 'noop') print(line, result);
+
+      // Lệnh có thể đến từ một cái nút (hàng gợi ý, chữ `timeline` ở dòng hint).
+      // Nếu tiêu điểm nằm lại trên nút đó thì lệnh gõ tiếp theo rơi vào hư không.
+      focusInput();
     },
-    [ctx, print, setCategory],
+    [ctx, print, setCategory, focusInput],
+  );
+
+  /** Nút gợi ý: lệnh đủ nghĩa thì chạy luôn, lệnh còn thiếu tham số thì điền sẵn. */
+  const quick = useCallback(
+    (cmd: string) => {
+      if (!cmd.endsWith(' ')) {
+        run(cmd);
+        return;
+      }
+      setValue(cmd);
+      focusInput();
+    },
+    [run, focusInput],
   );
 
   const submit = useCallback(
@@ -148,7 +179,9 @@ export function useTerminal() {
       if (arg === 'slug') return all.map((p) => p.slug);
       if (arg === 'category') return CATEGORY_ARGS;
       if (arg === 'theme') return [...THEME_IDS];
-      return LOCALE_ARGS;
+      if (arg === 'locale') return LOCALE_ARGS;
+      // `grep <chữ>`: tham số là chữ tự do, không có gì để gợi ý.
+      return [];
     },
     [all],
   );
@@ -203,7 +236,29 @@ export function useTerminal() {
     [complete, recall, run],
   );
 
-  const focusInput = useCallback(() => inputRef.current?.focus(), []);
+  // Mở trang là gõ được ngay, không phải bấm chuột một phát mở màn.
+  useEffect(() => {
+    focusInput();
+  }, [focusInput]);
+
+  /**
+   * Tiêu điểm vẫn có thể trôi đi: bấm ra ngoài, đóng một cửa sổ, Tab lung tung.
+   * Gõ một ký tự in được lúc đó là ý muốn gõ lệnh — kéo tiêu điểm về ô nhập và
+   * để nguyên phím vừa bấm chạy tiếp vào đó (không preventDefault).
+   * Trừ khi người dùng đang đứng ở một chỗ gõ được hoặc bấm được thật.
+   */
+  useEffect(() => {
+    // KeyboardEvent ở file này đang là bản của React (import type ở trên).
+    const onKeyDown = (e: globalThis.KeyboardEvent) => {
+      if (e.key.length !== 1 || e.ctrlKey || e.metaKey || e.altKey) return;
+      const el = document.activeElement as HTMLElement | null;
+      if (!el || el === inputRef.current) return;
+      if (el.closest?.('a, button, input, select, textarea, [contenteditable=""], [contenteditable="true"], [role="dialog"]')) return;
+      focusInput();
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [focusInput]);
 
   /**
    * Bàn phím ảo trên điện thoại không làm 100dvh co lại, nên dòng lệnh dễ bị
@@ -239,6 +294,7 @@ export function useTerminal() {
     setValue,
     history,
     run,
+    quick,
     submit,
     onKeyDown,
     focusInput,

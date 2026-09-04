@@ -1,6 +1,7 @@
 import { CATEGORIES } from '../../data/categories';
 import type { Profile } from '../../data/profile';
 import type { CategoryId, L10n, Locale, Project } from '../../data/types';
+import { normalize } from '../../lib/normalize';
 import type { ThemeId } from '../contract';
 import { THEME_IDS, isThemeId } from '../registry';
 
@@ -12,8 +13,12 @@ export interface CommandContext {
   projects: Project[];
   profile: Profile;
   locale: Locale;
+  /** Nhóm đang lọc — `grep` đếm số khớp trong đúng phạm vi người dùng đang thấy. */
+  category: CategoryArg;
   setTheme(id: ThemeId): void;
   setLocale(l: Locale): void;
+  /** Ô tìm kiếm chung của useCatalog, cũng là `?q=` trên URL. */
+  setQuery(q: string): void;
   open(slug: string): void;
   clear(): void;
 }
@@ -33,7 +38,7 @@ export type CommandResult =
   | { kind: 'error'; message: string };
 
 /** Kiểu tham số của một lệnh — dùng cho gợi ý khi bấm Tab. */
-export type ArgKind = 'category' | 'slug' | 'theme' | 'locale';
+export type ArgKind = 'category' | 'slug' | 'theme' | 'locale' | 'text';
 
 export interface CommandSpec {
   name: string;
@@ -54,6 +59,15 @@ export const COMMANDS: CommandSpec[] = [
     usage: 'ls [category]',
     about: { vi: 'liệt kê dự án, kèm nhóm thì lọc theo nhóm', en: 'list projects, optionally by category' },
     arg: 'category',
+  },
+  {
+    name: 'grep',
+    usage: 'grep [text]',
+    about: {
+      vi: 'lọc danh sách theo chữ; không kèm gì thì xoá bộ lọc (alias: /)',
+      en: 'filter the list by text; no argument clears it (alias: /)',
+    },
+    arg: 'text',
   },
   {
     name: 'cat',
@@ -138,6 +152,31 @@ export function suggestSlugs(input: string, slugs: string[], limit = 4): string[
     .map((c) => c.slug);
 }
 
+/**
+ * Chuỗi để so khớp khi tìm. Phải dựng y hệt useCatalog, nếu không con số `grep`
+ * in ra sẽ lệch với danh sách mà khối `ls` ngay bên dưới hiện lên.
+ */
+function haystack(p: Project): string {
+  return normalize(
+    [
+      p.title,
+      p.slug,
+      p.tagline.vi,
+      p.tagline.en,
+      p.repo ?? '',
+      ...p.tags,
+      p.categoryMeta.label.vi,
+      p.categoryMeta.label.en,
+    ].join(' '),
+  );
+}
+
+export function matchProjects(query: string, projects: Project[]): Project[] {
+  const needle = normalize(query);
+  if (!needle) return projects;
+  return projects.filter((p) => haystack(p).includes(needle));
+}
+
 function helpLines(locale: Locale): string[] {
   const width = Math.max(...COMMANDS.map((c) => c.usage.length));
   return [
@@ -183,6 +222,47 @@ function missingArg(ctx: CommandContext, command: 'cat' | 'open'): CommandResult
 }
 
 /**
+ * `grep <chữ>` đẩy thẳng vào bộ lọc chung của useCatalog — cùng bộ lọc mà các
+ * theme khác đang dùng, và cũng là `?q=` trên URL. Khối `ls` đang hiện vì thế
+ * co lại ngay, và đổi sang theme khác vẫn thấy đúng bộ lọc đó.
+ */
+function grep(input: string, ctx: CommandContext): CommandResult {
+  const needle = input.trim();
+  const scope =
+    ctx.category === 'all' ? ctx.projects : ctx.projects.filter((p) => p.category === ctx.category);
+
+  if (!needle) {
+    ctx.setQuery('');
+    return {
+      kind: 'text',
+      lines: [
+        pick(
+          ctx.locale,
+          `grep: đã xoá bộ lọc tìm kiếm · ${scope.length} dự án`,
+          `grep: search filter cleared · ${scope.length} projects`,
+        ),
+      ],
+    };
+  }
+
+  ctx.setQuery(needle);
+  const hits = matchProjects(needle, scope).length;
+  const lines = [
+    pick(
+      ctx.locale,
+      `grep "${needle}" · ${hits}/${scope.length} dự án khớp`,
+      `grep "${needle}" · ${hits}/${scope.length} projects matched`,
+    ),
+  ];
+  if (hits === 0) {
+    lines.push(
+      pick(ctx.locale, 'Gõ `grep` không kèm gì để xoá bộ lọc.', 'Type `grep` with no argument to clear it.'),
+    );
+  }
+  return { kind: 'text', lines };
+}
+
+/**
  * Vòng đời một lệnh: chuỗi thô vào, kết quả thuần ra. Mọi thứ chạm React đều
  * đi qua ctx, nên hàm này test được mà không cần dựng cây component.
  */
@@ -191,6 +271,13 @@ export function runCommand(input: string, ctx: CommandContext): CommandResult {
   if (!line) return { kind: 'noop' };
 
   const [head, ...rest] = line.split(' ');
+
+  // `/moba` — quen tay từ less và vim — cũng là grep, kể cả khi viết dính liền.
+  if (head.startsWith('/')) {
+    if (head.length > 1) rest.unshift(head.slice(1));
+    return grep(rest.join(' '), ctx);
+  }
+
   const name = head.toLowerCase();
   const arg = (rest[0] ?? '').toLowerCase();
 
@@ -220,6 +307,10 @@ export function runCommand(input: string, ctx: CommandContext): CommandResult {
         category: arg as CategoryId,
       };
     }
+
+    case 'grep':
+      // Chữ cần tìm giữ nguyên hoa thường của người gõ; so khớp đã normalize rồi.
+      return grep(rest.join(' '), ctx);
 
     case 'cat': {
       if (!arg) return missingArg(ctx, 'cat');

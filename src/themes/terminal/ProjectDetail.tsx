@@ -86,20 +86,34 @@ export function ProjectCard({ project }: { project: Project }) {
   );
 }
 
+interface DetailProps {
+  /**
+   * Nơi trả tiêu điểm về khi cửa sổ đóng. Shell truyền ô nhập lệnh vào đây: ở
+   * theme này chỗ người dùng cần quay lại là dòng lệnh, không phải cái nút vừa
+   * bấm. Bỏ trống thì quay về đúng chỗ vừa bấm như mọi dialog khác.
+   */
+  restoreFocus?: () => void;
+}
+
 /** Cửa sổ chi tiết — `open <slug>`, hoặc bấm vào tên dự án trong `ls`. */
-export function ProjectDetail() {
+export function ProjectDetail({ restoreFocus }: DetailProps = {}) {
   const { project, close, next, prev } = useProjectDetail();
   const { t, ti } = useI18n();
   const closeBtn = useRef<HTMLButtonElement>(null);
   const opener = useRef<Element | null>(null);
+
+  // Qua ref để effect dưới chỉ chạy lại khi đổi dự án, không phải mỗi lần render.
+  const restore = useRef(restoreFocus);
+  restore.current = restoreFocus;
 
   useEffect(() => {
     if (!project) return;
     opener.current = document.activeElement;
     closeBtn.current?.focus();
     return () => {
-      // Trả tiêu điểm về đúng chỗ vừa bấm, nếu không thì Tab tiếp theo nhảy về đầu trang.
-      (opener.current as HTMLElement | null)?.focus?.();
+      // Không trả tiêu điểm là Tab tiếp theo nhảy về đầu trang.
+      if (restore.current) restore.current();
+      else (opener.current as HTMLElement | null)?.focus?.();
     };
   }, [project]);
 

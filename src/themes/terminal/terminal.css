@@ -104,47 +104,24 @@
 }
 
 .term-titlebar {
+  min-width: 0;
+  overflow: hidden;
   font-size: 0.8em;
   font-weight: 500;
   color: var(--ink-muted);
   white-space: nowrap;
+  text-overflow: ellipsis;
+  letter-spacing: normal;
+  text-shadow: none;
 }
 
-.term-search {
+/* Cả nhóm điều khiển dồn về mép phải; khoảng trống ở giữa là của tiêu đề. */
+.term-bar-actions {
   display: flex;
-  flex: 1 1 10rem;
+  flex: 0 0 auto;
   align-items: center;
-  gap: 0.4rem;
-  max-width: 28rem;
-  border: 1px solid var(--line);
-  padding: 0.2rem 0.5rem;
-}
-
-.term-search:focus-within {
-  border-color: var(--accent);
-  box-shadow: var(--term-glow);
-}
-
-.term-search input {
-  flex: 1;
-  min-width: 3rem;
-  border: 0;
-  background: transparent;
-  color: var(--ink);
-  font: inherit;
-  outline: none;
-}
-
-.term-search input::placeholder {
-  color: var(--ink-muted);
-}
-
-.term-search input::-webkit-search-cancel-button {
-  filter: grayscale(1) brightness(1.6);
-}
-
-.term-count {
-  font-size: 0.8em;
+  gap: 0.5rem;
+  margin-left: auto;
 }
 
 /* ── Màn hình ─────────────────────────────────────────────────────────── */
@@ -195,6 +172,16 @@
   border-color: var(--accent);
   background: var(--term-wash);
   text-shadow: var(--term-glow);
+}
+
+/* Dòng nhắc `?q=` mang từ theme khác sang — đi liền dưới dòng hint, nên dòng
+   hint bỏ bớt khoảng cách dưới thay vì để hở một quãng trống giữa hai câu. */
+.term-hint:has(+ .term-filter) {
+  margin-bottom: 0.3rem !important;
+}
+
+.term-filter {
+  color: var(--term-amber);
 }
 
 .term-entry {
@@ -954,8 +941,9 @@ button.term-tl-name:hover {
 /* ── Màn hình hẹp: nút gợi ý lệnh, hàng ls gọn lại ───────────────────── */
 
 @media (max-width: 639px) {
-  .term-titlebar,
-  .term-count {
+  /* Bỏ ô tìm kiếm rồi thì thanh này vừa một hàng, tiêu đề khỏi phải trốn đi —
+     chỉ ~/portfolio là nhường chỗ, vì tên máy mới là thứ đáng đọc. */
+  .term-titlebar-path {
     display: none;
   }
 
@@ -964,14 +952,8 @@ button.term-tl-name:hover {
   }
 
   .term-bar {
-    flex-wrap: wrap;
     gap: 0.5rem;
-  }
-
-  .term-search {
-    order: 3;
-    flex-basis: 100%;
-    max-width: none;
+    padding-inline: 0.5rem;
   }
 
   /* Máng bên trái gom sao và năm thành hai dòng, nhường hết bề ngang còn lại

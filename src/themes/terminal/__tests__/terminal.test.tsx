@@ -62,6 +62,32 @@ describe('Terminal', () => {
     expect(input).toHaveFocus();
   });
 
+  it('vừa render là ô nhập đã có tiêu điểm — gõ được ngay, không cần bấm chuột', () => {
+    renderShell();
+    expect(commandLine()).toHaveFocus();
+    expect(document.activeElement).toBe(commandLine());
+  });
+
+  it('chạy lệnh xong tiêu điểm vẫn ở ô nhập', async () => {
+    renderShell();
+    await type('ls games');
+    expect(commandLine()).toHaveFocus();
+  });
+
+  it('bấm nút gợi ý lệnh xong thì tiêu điểm quay về ô nhập, không nằm lại trên nút', async () => {
+    const { container } = renderShell();
+    const quick = container.querySelector<HTMLElement>('.term-quick')!;
+    await userEvent.click(within(quick).getByRole('button', { name: 'skills' }));
+    expect(commandLine()).toHaveFocus();
+  });
+
+  it('bấm nút timeline ở dòng hint cũng trả tiêu điểm về ô nhập', async () => {
+    const { container } = renderShell();
+    const hint = container.querySelector<HTMLElement>('.term-hint')!;
+    await userEvent.click(within(hint).getByRole('button', { name: 'timeline' }));
+    expect(commandLine()).toHaveFocus();
+  });
+
   it('gõ `ls games` thì in ra đúng các dự án nhóm games', async () => {
     const { container } = renderShell();
     await type('ls games');
@@ -142,14 +168,15 @@ describe('Terminal', () => {
     expect(await screen.findByRole('dialog')).toBeInTheDocument();
   });
 
-  it('Esc đóng cửa sổ chi tiết và trả tiêu điểm về nút vừa bấm', async () => {
+  it('Esc đóng cửa sổ chi tiết và trả tiêu điểm về ô nhập, không về nút vừa bấm', async () => {
     renderShell();
     const opener = screen.getByRole('button', { name: /^moba2d$/i });
     await userEvent.click(opener);
     await screen.findByRole('dialog');
     await userEvent.keyboard('{Escape}');
     expect(screen.queryByRole('dialog')).toBeNull();
-    expect(opener).toHaveFocus();
+    expect(commandLine()).toHaveFocus();
+    expect(opener).not.toHaveFocus();
   });
 
   it('có nút đổi theme và nút EN', () => {
@@ -161,32 +188,72 @@ describe('Terminal', () => {
   it('lệnh `lang vi` đổi ngôn ngữ cả trang', async () => {
     renderShell();
     await type('lang vi');
-    expect(screen.getByRole('searchbox')).toHaveAttribute('placeholder', 'Tìm dự án, công nghệ…');
+    expect(document.documentElement.lang).toBe('vi');
+    expect(screen.getByText(/xem mọi lệnh/i)).toBeInTheDocument();
   });
 
-  it('có ô tìm kiếm, gõ vào thì danh sách co lại', async () => {
-    renderShell();
+  it('không còn ô tìm kiếm riêng nữa — `grep` làm việc đó', () => {
+    const { container } = renderShell();
+    expect(container.querySelectorAll('input[type="search"]')).toHaveLength(0);
+    expect(screen.queryByRole('searchbox')).toBeNull();
+  });
+
+  it('`grep moba` làm khối `ls` co lại', async () => {
+    const { container } = renderShell();
     const before = screen.getAllByRole('article').length;
-    const search = screen.getByRole('searchbox');
-    expect(search).toHaveAttribute('type', 'search');
-    await userEvent.type(search, 'moba');
+
+    await type('grep moba');
+
     const after = screen.getAllByRole('article').length;
     expect(after).toBeGreaterThan(0);
     expect(after).toBeLessThan(before);
+    expect(lastEntry(container)).toHaveTextContent(/grep "moba"/);
+    expect(new URLSearchParams(window.location.search).get('q')).toBe('moba');
+  });
+
+  it('`grep` không tham số thì xoá bộ lọc, danh sách trở lại đầy đủ', async () => {
+    renderShell();
+    const before = screen.getAllByRole('article').length;
+    await type('grep moba');
+    expect(screen.getAllByRole('article').length).toBeLessThan(before);
+
+    await type('grep');
+    expect(screen.getAllByRole('article')).toHaveLength(before);
+    expect(new URLSearchParams(window.location.search).get('q')).toBeNull();
   });
 
   it('không còn dự án nào khớp thì nói rõ chứ không để màn trống', async () => {
     renderShell();
-    await userEvent.type(screen.getByRole('searchbox'), 'zzzzkhongcogi');
+    await type('grep zzzzkhongcogi');
     expect(screen.queryAllByRole('article')).toHaveLength(0);
     expect(screen.getByText(/no matching projects|không tìm thấy/i)).toBeInTheDocument();
   });
 
+  it('mở trang với ?q= sẵn từ theme khác thì `ls` nói ra bộ lọc đó', () => {
+    window.history.replaceState({}, '', '/?q=moba');
+    const { container } = renderShell();
+
+    expect(container.querySelector('.term-ls-head')).toHaveTextContent(/moba/);
+    expect(container.querySelector('.term-filter')).toHaveTextContent(/moba/);
+  });
+
   it('có hàng nút gợi ý lệnh cho màn hình hẹp, bấm là chạy lệnh', async () => {
     const { container } = renderShell();
-    await userEvent.click(screen.getByRole('button', { name: 'skills' }));
+    const quick = container.querySelector<HTMLElement>('.term-quick')!;
+    await userEvent.click(within(quick).getByRole('button', { name: 'skills' }));
     expect(lastEntry(container)).toHaveAttribute('data-cmd', 'skills');
     expect(within(lastEntry(container)).getByRole('heading', { name: /skills|kỹ năng/i })).toBeInTheDocument();
+  });
+
+  it('hàng nút gợi ý có grep — lệnh còn thiếu tham số nên chỉ điền sẵn vào ô nhập', async () => {
+    const { container } = renderShell();
+    const quick = container.querySelector<HTMLElement>('.term-quick')!;
+    await userEvent.click(within(quick).getByRole('button', { name: 'grep' }));
+
+    expect(commandLine()).toHaveValue('grep ');
+    expect(commandLine()).toHaveFocus();
+    // Chưa chạy gì cả: không có khối nào tên `grep` in ra.
+    expect(container.querySelector('[data-cmd="grep"]')).toBeNull();
   });
 
   it('`cat <slug>` in chi tiết ngay trên màn hình', async () => {
@@ -236,7 +303,7 @@ describe('timeline', () => {
     await type('timeline');
     const before = within(timelineBlock(container)).getAllByRole('button').length;
 
-    await userEvent.type(screen.getByRole('searchbox'), 'moba');
+    await type('grep moba');
 
     const after = within(timelineBlock(container)).getAllByRole('button').length;
     expect(after).toBeGreaterThan(0);
