@@ -36,6 +36,28 @@ dự án, và có nút đổi sang theme khác.
 lần. Đổi lại, không bao giờ có chuyện một theme lặng lẽ thiếu thông tin mà
 không ai biết.
 
+Đã cân nhắc cách rẻ hơn — một bộ component mặc định để theme nào chưa kịp làm
+thì dùng tạm — nhưng bỏ: `sections` chỉ là bản kê khai, các `Shell` import
+component trực tiếp, nên có bản mặc định thì vẫn phải tự tay cắm vào cả bốn
+`Shell`; mà một bản generic thì trông sai ở cả bốn (Terminal đâu phải các khối,
+nó là output của lệnh). Xây nó tốn hơn phần tiết kiệm được. Thứ thật sự có giá
+là phát hiện tự động, và đó là việc của `contract.test.tsx`.
+
+### Thêm một khối nội dung mới
+
+1. Thêm nó vào `ThemeSections` trong `src/themes/contract.ts`.
+2. Nếu cần dữ liệu mới, viết một hook headless ở `src/hooks/` — đừng để logic
+   rơi vào theme, bốn bản sẽ lệch nhau.
+3. Thêm một dòng vào bảng `FINGERPRINTS` trong
+   `src/themes/__tests__/contract.test.tsx`: một dấu vết trong DOM chỉ có thể
+   đến từ đúng khối đó. Ba theme quên cắm sẽ đỏ ngay, kèm tên theme và tên khối.
+4. Viết component trong từng `src/themes/<id>/` và cắm vào `Shell` của nó.
+   Terminal thì thường là một lệnh mới — nhớ thêm vào `REACH` trong cùng file test.
+5. `npm test` và `npx tsc --noEmit`.
+
+Bước 3 làm trước bước 4 là cố ý: lúc đó bạn có một danh sách đỏ nói rõ còn
+thiếu chỗ nào, thay vì phải tự nhớ.
+
 ## Chạy
 
 ```bash
