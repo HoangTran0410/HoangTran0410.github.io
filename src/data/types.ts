@@ -54,6 +54,12 @@ export interface CuratedProject {
   featured?: boolean;
   /** Năm bắt đầu, dùng để sắp xếp và hiện timeline */
   year: number;
+  /**
+   * Tháng bắt đầu (1–12). Tuỳ chọn — bỏ trống thì lấy tháng tạo repo trên
+   * GitHub. Chỉ điền khi GitHub sai, ví dụ dự án làm trước rồi mới đẩy lên,
+   * hoặc repo được đổi tên/tạo lại.
+   */
+  month?: number;
   status: ProjectStatus;
   /**
    * Ghi đè ảnh thumbnail. Mặc định (bỏ trống) là tìm /shots/<slug>.webp.
@@ -71,6 +77,8 @@ export interface GithubStats {
   language: string | null;
   /** ISO date của lần push gần nhất */
   pushedAt: string;
+  /** ISO date lúc tạo repo — dùng làm tháng mặc định khi curated bỏ trống */
+  createdAt: string;
   topics: string[];
   archived: boolean;
   /** Repo này là fork của người khác */
@@ -89,6 +97,8 @@ export interface GithubStats {
 /** Model runtime sau khi merge — đây là thứ các theme nhận được. */
 export interface Project extends CuratedProject {
   stats?: GithubStats;
+  /** Tháng đã giải quyết: curated nếu có, không thì tháng tạo repo, không nữa thì 0 */
+  month: number;
   /** Đã resolve sẵn, khỏi phải lookup lại trong lúc render */
   categoryMeta: Category;
 }

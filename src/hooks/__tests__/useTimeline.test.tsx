@@ -41,11 +41,18 @@ describe('useTimeline', () => {
     for (const p of shown) expect(p.category).toBe('osint');
   });
 
-  it('dự án trong một năm sắp theo mức độ nổi bật rồi tới số sao', () => {
+  it('trong một năm, tháng muộn hơn lên trước', () => {
     const year = setup().result.current.timeline.find((y) => y.projects.length > 2)!;
-    const rank = year.projects.map((p) => [p.featured ? 0 : 1, -(p.stats?.stars ?? 0)] as const);
-    const sorted = [...rank].sort((a, b) => a[0] - b[0] || a[1] - b[1]);
-    expect(rank).toEqual(sorted);
+    const months = year.projects.map((p) => p.month || 0);
+    expect([...months].sort((a, b) => b - a)).toEqual(months);
+  });
+
+  it('lấy tháng từ ngày tạo repo khi curated bỏ trống', () => {
+    const all = setup().result.current.timeline.flatMap((y) => y.projects);
+    const known = all.filter((p) => p.month > 0);
+    // Không mục nào trong projects.ts điền month, nên mọi giá trị > 0 đều là
+    // suy ra từ GitHub — chứng tỏ đường fallback có chạy thật.
+    expect(known.length).toBeGreaterThan(20);
   });
 
   it('lọc đến mức không còn gì thì timeline rỗng, không phải năm rỗng', () => {

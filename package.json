@@ -12,7 +12,8 @@
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
     "sync": "tsx scripts/sync-github.mjs",
-    "shots": "tsx scripts/shots.mjs"
+    "shots": "tsx scripts/shots.mjs",
+    "discover": "tsx scripts/discover.mjs"
   },
   "repository": {
     "type": "git",

@@ -55,8 +55,11 @@ export function useTimeline(): TimelineYear[] {
     for (const p of projects) bucket(p.year).projects.push(p);
 
     for (const y of byYear.values()) {
+      // Trong một năm: tháng muộn hơn lên trước (cùng chiều với năm giảm dần).
+      // Dự án không biết tháng (month = 0) xuống cuối năm đó.
       y.projects.sort(
         (a, b) =>
+          (b.month || 0) - (a.month || 0) ||
           Number(!!b.featured) - Number(!!a.featured) ||
           (b.stats?.stars ?? 0) - (a.stats?.stars ?? 0) ||
           a.title.localeCompare(b.title),

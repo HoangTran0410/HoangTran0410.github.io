@@ -74,13 +74,40 @@ npm run build
 |---|---|
 | Thêm/bớt dự án, đổi mô tả | `src/data/projects.ts` |
 | Đánh dấu dự án không dùng ảnh chụp | `shot: null` trong `src/data/projects.ts` |
+| Sửa mốc thời gian một dự án | `year`, và `month` (1–12) nếu muốn chính xác hơn |
 | Kinh nghiệm, học vấn, kỹ năng, liên hệ | `src/data/profile.ts` |
 | Nhóm dự án và màu của nhóm | `src/data/categories.ts` |
 | Chữ trên giao diện (nút, nhãn) | `src/i18n/strings.ts` |
 
+### Thêm một dự án
+
+Danh sách là viết tay có chủ đích: trong 190+ repo public phần lớn là bài tập và
+thử nghiệm, để tự động quét thì trang sẽ ngập. Nhưng "nhớ xem có gì mới" thì
+máy làm được:
+
+```bash
+npm run discover                      # repo public chưa có trong danh sách
+npm run discover -- --all             # kể cả fork và repo không mô tả
+npm run discover -- --emit=<tên-repo> # in sẵn một mục để dán vào
+```
+
+`--emit` seed sẵn `tags` từ ngôn ngữ chính và GitHub topics, `year` từ ngày tạo
+repo, `links.demo` từ homepage — chỉ còn phần văn phải tự viết. Chỗ nào để lại
+`TODO` thì `npm test` đỏ.
+
+Fork mà bạn không viết dòng nào sẽ bị ẩn khỏi danh sách gợi ý, còn fork có đóng
+góp thì hiện kèm số commit để bạn tự quyết.
+
 Sau khi thêm repo mới vào `projects.ts`, chạy `npm run sync` để kéo số liệu về.
 
 Mọi chuỗi hiển thị đều là `{ vi, en }`. Test sẽ đỏ nếu thiếu một ngôn ngữ.
+
+`month` là tuỳ chọn: bỏ trống thì dòng thời gian lấy tháng tạo repo trên GitHub,
+nên thứ tự trong một năm tự đúng. Chỉ điền khi GitHub sai — dự án làm trước rồi
+mới đẩy lên, hoặc repo bị tạo lại.
+
+`tags` viết tay, nhưng có test bắt buộc chứa ngôn ngữ chính mà GitHub báo, để
+nó không trôi khỏi thực tế khi dự án đổi stack.
 
 ## Số liệu GitHub
 

@@ -60,6 +60,28 @@ describe('projects curated', () => {
     }
   });
 
+  /**
+   * `npm run discover -- --emit=<repo>` in ra một khung có sẵn chữ TODO. Khung
+   * đó đủ ngắn để lọt mọi kiểm tra độ dài, nên nếu không có test này thì một
+   * mục điền dở hoàn toàn có thể lên thẳng trang.
+   */
+  it('không còn chữ TODO nào sót lại từ khung sinh sẵn', () => {
+    const unfinished = PROJECTS.filter((p) =>
+      [p.tagline.vi, p.tagline.en, p.blurb.vi, p.blurb.en, p.category as string]
+        .some((t) => t.includes('TODO')),
+    ).map((p) => p.slug);
+
+    expect(unfinished, 'điền nốt trước khi đưa lên trang').toEqual([]);
+  });
+
+  it('tháng nếu có phải nằm trong 1–12', () => {
+    for (const p of PROJECTS) {
+      if (p.month === undefined) continue;
+      expect(p.month, p.slug).toBeGreaterThanOrEqual(1);
+      expect(p.month, p.slug).toBeLessThanOrEqual(12);
+    }
+  });
+
   it('năm hợp lý', () => {
     for (const p of PROJECTS) {
       expect(p.year, p.slug).toBeGreaterThanOrEqual(2018);

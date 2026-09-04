@@ -59,6 +59,7 @@ async function fetchRepo(repo) {
     forks: r.forks_count ?? 0,
     language: r.language ?? null,
     pushedAt: (r.pushed_at ?? '').slice(0, 10),
+    createdAt: (r.created_at ?? '').slice(0, 10),
     topics: r.topics ?? [],
     archived: !!r.archived,
     fork,
@@ -79,7 +80,7 @@ for (const repo of repos) {
     const old = previous[repo];
     result[repo] = old
       ? { ...old, ok: false }
-      : { repo, stars: 0, forks: 0, language: null, pushedAt: '', topics: [], archived: false, ok: false };
+      : { repo, stars: 0, forks: 0, language: null, pushedAt: '', createdAt: '', topics: [], archived: false, fork: false, parent: null, myCommits: -1, ok: false };
   }
 }
 
