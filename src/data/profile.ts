@@ -57,7 +57,7 @@ export const PROFILE: Profile = {
     en: 'Software engineer · games, web, and small tools with real users',
   },
   bio: {
-    vi: 'Mình xây thứ chạy được. Ban ngày làm ứng dụng di động, ban đêm làm engine game, extension trình duyệt và mấy công cụ sinh ra từ việc tự thấy bực mình. Một trong số đó nuôi được chính nó mỗi tháng; số còn lại chỉ đơn giản là vui.',
+    vi: 'Mình xây thứ chạy được. Ban ngày làm ứng dụng di động, ban đêm làm engine game, extension trình duyệt và mấy công cụ sinh ra từ việc tự thấy bực mình. Một trong số đó nuôi được chính nó mỗi tháng; số còn lại chỉ đơn giản là vui. Phần lớn những gì làm gần đây đều đi cùng AI — không phải để gõ hộ, mà để bàn thiết kế, viết spec, dựng test và soi lại code.',
     en: 'I build things that run. Mobile apps by day; game engines, browser extensions and tools born out of my own irritation by night. One of them pays for itself every month; the rest are just fun.',
   },
   location: { vi: 'Việt Nam', en: 'Vietnam' },
@@ -81,6 +81,17 @@ export const PROFILE: Profile = {
     {
       label: { vi: 'Game & đồ hoạ', en: 'Games & graphics' },
       items: ['Canvas 2D', 'p5.js', 'Three.js', 'WebGL', 'Phaser', 'Thiết kế engine'],
+    },
+    {
+      label: { vi: 'Làm việc cùng AI', en: 'Working with AI' },
+      items: [
+        'Claude Code',
+        'Agent skills & MCP',
+        'Lập kế hoạch từ spec',
+        'Sinh code theo TDD',
+        'Review code bằng AI',
+        'Dựng agent riêng',
+      ],
     },
     {
       label: { vi: 'Nền tảng', en: 'Platform' },
