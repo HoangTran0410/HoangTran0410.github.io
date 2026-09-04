@@ -162,14 +162,14 @@ export interface GithubStats {
   pushedAt: string;             // ISO date
   topics: string[];
   archived: boolean;
-  /** Có bao nhiêu repo con nếu là org được gom (moba2d-packs) */
-  ok: boolean;                  // false nếu API trả lỗi lần sync gần nhất
+  /** false nếu lần sync gần nhất gọi API repo này bị lỗi; dữ liệu bên trên là của lần sync cũ */
+  ok: boolean;
 }
 
 /** Model runtime sau khi merge, đây là thứ các theme nhận được */
 export interface Project extends CuratedProject {
   stats?: GithubStats;
-  category_: Category;          // đã resolve sẵn, khỏi lookup trong render
+  categoryMeta: Category;       // đã resolve sẵn, khỏi lookup lại trong lúc render
 }
 ```
 
