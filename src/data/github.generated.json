@@ -276,6 +276,19 @@
     "myCommits": -1,
     "ok": true
   },
+  "HoangTran0410/chatgpt-local-coder": {
+    "repo": "HoangTran0410/chatgpt-local-coder",
+    "stars": 0,
+    "forks": 0,
+    "language": "TypeScript",
+    "pushedAt": "2026-08-05",
+    "topics": [],
+    "archived": false,
+    "fork": true,
+    "parent": "hoangcoderr/chatgpt-local-coder",
+    "myCommits": 4,
+    "ok": true
+  },
   "HoangTran0410/cheat-sheets": {
     "repo": "HoangTran0410/cheat-sheets",
     "stars": 3,

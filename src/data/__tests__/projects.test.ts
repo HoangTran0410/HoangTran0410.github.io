@@ -95,6 +95,24 @@ describe('projects curated', () => {
     expect(unlabelled, 'giữ fork thì được, nhưng phải nói rõ nó là fork').toEqual([]);
   });
 
+  /**
+   * Tag là viết tay, nên rất dễ trôi khỏi thực tế: đổi repo sang TypeScript rồi
+   * mà tag vẫn ghi JavaScript thì chẳng ai nhận ra. Neo nó vào một sự thật
+   * kiểm chứng được — ngôn ngữ chính GitHub báo — thì ít nhất phần xương sống
+   * không bịa được.
+   *
+   * Đây là kiểm phần nào: 'Swing' hay 'Quadtree' vẫn là lời của người viết.
+   */
+  it('tag phải chứa ngôn ngữ chính mà GitHub báo', () => {
+    const drifted = PROJECTS.filter((p) => {
+      const lang = p.repo ? STATS[p.repo]?.language : null;
+      if (!lang || !STATS[p.repo!]?.ok) return false;
+      return !p.tags.some((t) => t.toLowerCase() === lang.toLowerCase());
+    }).map((p) => `${p.slug}: GitHub báo ${STATS[p.repo!].language}, tag đang là [${p.tags.join(', ')}]`);
+
+    expect(drifted, 'thêm ngôn ngữ đó vào tags, hoặc sửa lại cho đúng').toEqual([]);
+  });
+
   it('category nào cũng có ít nhất một dự án, để không hiện nhóm rỗng', () => {
     const used = new Set(PROJECTS.map((p) => p.category));
     for (const id of Object.keys(CATEGORY_BY_ID)) expect(used.has(id as never), id).toBe(true);
