@@ -67,3 +67,51 @@ body::after {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* Phần đầu trang tĩnh trong index.html — React thay thế nó khi mount.
+   Cố ý dùng font hệ thống: chờ webfont thì mất đúng cái nó sinh ra để cứu. */
+.boot {
+  padding: clamp(2.5rem, 8vw, 6rem) clamp(1.25rem, 5vw, 5rem);
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.boot-eyebrow {
+  margin: 0;
+  font-size: 0.6875rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+.boot-name {
+  margin: 0.75rem 0 0;
+  font-family: ui-serif, Georgia, serif;
+  font-size: clamp(3.2rem, 13vw, 10rem);
+  font-weight: 600;
+  line-height: 0.84;
+  letter-spacing: -0.035em;
+  color: var(--ink);
+}
+
+.boot-line {
+  margin: 1.75rem 0 0;
+  max-width: 24ch;
+  font-family: ui-serif, Georgia, serif;
+  font-size: clamp(1.25rem, 3vw, 2rem);
+  line-height: 1.22;
+  color: var(--ink);
+}
+
+.boot-links {
+  margin: 2rem 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+  font-size: 0.9rem;
+}
+
+.boot-links a {
+  color: var(--ink-muted);
+  text-underline-offset: 4px;
+}

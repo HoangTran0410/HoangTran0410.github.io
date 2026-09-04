@@ -87,9 +87,47 @@
       />
     </noscript>
 
+    <script>
+      // Chạy trước khi vẽ khung hình đầu tiên. Hai việc:
+      //  1. Đặt data-theme sớm để phần đầu trang tĩnh bên dưới lấy đúng bộ màu —
+      //     nếu để React đặt thì người dùng theme tối sẽ thấy một nháy trắng.
+      //  2. Không tin giá trị trong localStorage: chỉ nhận đúng bốn id đã biết.
+      (function () {
+        try {
+          var t = new URLSearchParams(location.search).get('theme') || localStorage.getItem('theme');
+          if (['editorial', 'arcade', 'bento', 'terminal'].indexOf(t) === -1) t = 'editorial';
+          document.documentElement.dataset.theme = t;
+          var dark = t === 'arcade' || t === 'terminal';
+          var m = document.querySelector('meta[name="theme-color"]');
+          if (m) m.setAttribute('content', dark ? '#08070c' : '#f7f4ed');
+        } catch (e) {
+          document.documentElement.dataset.theme = 'editorial';
+        }
+      })();
+    </script>
+
     <script type="module" src="/src/main.tsx"></script>
   </head>
   <body>
-    <div id="root"></div>
+    <!--
+      Phần đầu trang tĩnh. Trang là SPA nên nếu để trống thì trình duyệt không
+      có gì để vẽ cho tới khi JS tải và chạy xong — trên mobile bị bóp băng
+      thông và CPU thì đó là hơn 5 giây màn hình trắng. React thay thế toàn bộ
+      khối này khi mount, nên nó chỉ tồn tại trong khoảnh khắc đầu.
+
+      Cũng là lưới an toàn: JS hỏng thì khách vẫn biết đây là trang của ai và
+      liên hệ được.
+    -->
+    <div id="root">
+      <div class="boot">
+        <p class="boot-eyebrow">HoangTran0410</p>
+        <h1 class="boot-name">Hoang Tran</h1>
+        <p class="boot-line">Games, web, and small tools with real users</p>
+        <p class="boot-links">
+          <a href="https://github.com/HoangTran0410">GitHub</a>
+          <a href="mailto:99.hoangtran@gmail.com">99.hoangtran@gmail.com</a>
+        </p>
+      </div>
+    </div>
   </body>
 </html>
