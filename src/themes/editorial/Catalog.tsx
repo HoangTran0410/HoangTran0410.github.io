@@ -55,7 +55,7 @@ function Row({ project, index }: { project: Project; index: number }) {
 
         <ul className="mt-2 flex flex-wrap gap-x-3 gap-y-1">
           {project.tags.slice(0, 4).map((tag) => (
-            <li key={tag} className="ed-num text-[0.68rem] tracking-wide text-muted/80">
+            <li key={tag} className="ed-num text-[0.72rem] tracking-wide text-muted">
               {tag}
             </li>
           ))}

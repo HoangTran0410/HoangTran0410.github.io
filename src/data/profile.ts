@@ -51,7 +51,7 @@ export interface Profile {
 export const PROFILE: Profile = {
   name: 'Hoang Tran',
   handle: 'HoangTran0410',
-  avatar: 'https://avatars.githubusercontent.com/u/36368107?v=4',
+  avatar: 'https://avatars.githubusercontent.com/u/36368107?v=4&s=256',
   headline: {
     vi: 'Kỹ sư phần mềm · Game, web và những công cụ nhỏ có người dùng thật',
     en: 'Software engineer · games, web, and small tools with real users',

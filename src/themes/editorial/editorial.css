@@ -29,7 +29,7 @@
 /* Tên lớn: cắt sát mép trên dưới như tít báo */
 .ed-name {
   font-family: var(--font-display);
-  font-variation-settings: 'SOFT' 0, 'WONK' 1, 'opsz' 144;
+  font-variation-settings: 'opsz' 144;
   font-weight: 600;
   font-size: clamp(3.2rem, 13vw, 10rem);
   line-height: 0.84;
@@ -42,7 +42,7 @@
 
 .ed-display {
   font-family: var(--font-display);
-  font-variation-settings: 'SOFT' 0, 'WONK' 1, 'opsz' 72;
+  font-variation-settings: 'opsz' 72;
   letter-spacing: -0.02em;
 }
 
