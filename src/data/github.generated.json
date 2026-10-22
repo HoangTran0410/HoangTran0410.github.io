@@ -650,7 +650,7 @@
   "LOL2D/LOL2D-ver1": {
     "repo": "LOL2D/LOL2D-ver1",
     "stars": 30,
-    "forks": 11,
+    "forks": 10,
     "language": "JavaScript",
     "pushedAt": "2020-12-14",
     "createdAt": "2020-04-14",
@@ -675,7 +675,7 @@
     "stars": 11,
     "forks": 7,
     "language": "HTML",
-    "pushedAt": "2026-10-20",
+    "pushedAt": "2026-10-21",
     "createdAt": "2024-10-21",
     "topics": [
       "all-in-one",
@@ -694,7 +694,7 @@
   },
   "Useful-Scripts-Extension/useful-script": {
     "repo": "Useful-Scripts-Extension/useful-script",
-    "stars": 534,
+    "stars": 533,
     "forks": 95,
     "language": "JavaScript",
     "pushedAt": "2026-07-14",
@@ -727,7 +727,7 @@
     "stars": 7,
     "forks": 2,
     "language": "HTML",
-    "pushedAt": "2026-10-20",
+    "pushedAt": "2026-10-21",
     "createdAt": "2024-12-12",
     "topics": [],
     "archived": false,
