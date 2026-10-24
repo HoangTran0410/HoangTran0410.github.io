@@ -82,7 +82,7 @@
   "HoangTran0410/FBMediaDownloader": {
     "repo": "HoangTran0410/FBMediaDownloader",
     "stars": 190,
-    "forks": 64,
+    "forks": 65,
     "language": "JavaScript",
     "pushedAt": "2025-02-27",
     "createdAt": "2021-09-15",
@@ -582,7 +582,7 @@
   },
   "HoangTran0410/time-horizon": {
     "repo": "HoangTran0410/time-horizon",
-    "stars": 38,
+    "stars": 39,
     "forks": 9,
     "language": "TypeScript",
     "pushedAt": "2026-10-17",
@@ -694,8 +694,8 @@
   },
   "Useful-Scripts-Extension/useful-script": {
     "repo": "Useful-Scripts-Extension/useful-script",
-    "stars": 533,
-    "forks": 95,
+    "stars": 534,
+    "forks": 96,
     "language": "JavaScript",
     "pushedAt": "2026-07-14",
     "createdAt": "2022-10-28",
