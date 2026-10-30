@@ -35,6 +35,7 @@ export const SHOT_SLUGS: string[] = [
   'qr-jigsaw',
   'saoke-yagi',
   'time-horizon',
+  'tv-remote',
   'titanbench',
   'visualyze',
 ];

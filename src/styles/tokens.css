@@ -73,3 +73,21 @@
   --font-mono: 'JetBrains Mono', ui-monospace, Menlo, monospace;
   --grain: 0.05;
 }
+
+[data-theme='aurora'] {
+  --bg: #08070c;
+  --surface: #0f0f17;
+  --surface-2: #181826;
+  --ink: #f4f3fa;
+  --ink-muted: #9b99b0;
+  --line: #262536;
+  --accent: #8b5cf6;
+  --accent-ink: #ffffff;
+  --radius: 14px;
+  --shadow: 0 24px 60px -20px rgb(0 0 0 / 0.7), 0 0 0 1px rgb(255 255 255 / 0.04);
+  --font-display: 'Geist', ui-sans-serif, system-ui, sans-serif;
+  --font-body: 'Geist', ui-sans-serif, system-ui, sans-serif;
+  --font-meta: 'Geist', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'Geist Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+  --grain: 0.03;
+}

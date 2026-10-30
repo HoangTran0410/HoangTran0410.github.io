@@ -1,6 +1,16 @@
 import type { Theme, ThemeId, ThemeMeta } from './contract';
 
 export const THEME_META: Record<ThemeId, ThemeMeta> = {
+  aurora: {
+    id: 'aurora',
+    dark: true,
+    swatch: '#8b5cf6',
+    label: { vi: 'Aurora', en: 'Aurora' },
+    hint: {
+      vi: 'Tối, kính mờ, ánh cực quang — kiểu trang sản phẩm hiện đại',
+      en: 'Dark glass and northern lights — a modern product page',
+    },
+  },
   editorial: {
     id: 'editorial',
     dark: false,
@@ -45,9 +55,10 @@ export const THEME_META: Record<ThemeId, ThemeMeta> = {
 
 export const THEME_IDS = Object.keys(THEME_META) as ThemeId[];
 
-export const DEFAULT_THEME: ThemeId = 'editorial';
+export const DEFAULT_THEME: ThemeId = 'aurora';
 
 export const THEME_LOADERS: Record<ThemeId, () => Promise<{ default: Theme }>> = {
+  aurora: () => import('./aurora'),
   editorial: () => import('./editorial'),
   arcade: () => import('./arcade'),
   bento: () => import('./bento'),

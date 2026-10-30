@@ -1,7 +1,7 @@
 import type { ComponentType } from 'react';
 import type { L10n } from '../data/types';
 
-export type ThemeId = 'editorial' | 'arcade' | 'bento' | 'terminal';
+export type ThemeId = 'aurora' | 'editorial' | 'arcade' | 'bento' | 'terminal';
 
 export interface ThemeMeta {
   id: ThemeId;

@@ -28,7 +28,7 @@ describe('phần đầu trang tĩnh', () => {
     expect(html.indexOf('dataset.theme')).toBeLessThan(html.indexOf('id="root"'));
   });
 
-  it('chỉ nhận đúng bốn theme đã biết, không tin thẳng localStorage', () => {
-    expect(html).toContain("['editorial', 'arcade', 'bento', 'terminal']");
+  it('chỉ nhận đúng các theme đã biết, không tin thẳng localStorage', () => {
+    expect(html).toContain("['aurora', 'editorial', 'arcade', 'bento', 'terminal']");
   });
 });

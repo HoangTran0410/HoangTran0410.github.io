@@ -1,7 +1,7 @@
 # hoangtran99.is-a.dev
 
 CV + portfolio của [Hoang Tran](https://github.com/HoangTran0410). Một bộ dữ liệu,
-**bốn theme render khác nhau**, đổi ngay trên web mà không mất chỗ đang xem.
+**năm theme render khác nhau**, đổi ngay trên web mà không mất chỗ đang xem.
 
 → **https://hoangtran99.is-a.dev**
 
@@ -14,7 +14,7 @@ gì về giao diện — nhờ vậy thêm theme thứ năm không phải đụn
 src/data/     thuần TypeScript, 0 React   projects · profile · categories · github.generated.json
 src/lib/      hàm thuần                   merge · stats · normalize · gradient
 src/hooks/    headless, không có JSX riêng useI18n · useCatalog · useTheme · useProjectDetail · useTimeline
-src/themes/   4 renderer độc lập          editorial · arcade · bento · terminal
+src/themes/   5 renderer độc lập          aurora · editorial · arcade · bento · terminal
 ```
 
 Toàn bộ state (ngôn ngữ, bộ lọc, ô tìm kiếm, dự án đang mở) sống ở tầng hook,

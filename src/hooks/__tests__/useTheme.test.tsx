@@ -13,8 +13,8 @@ beforeEach(() => {
 });
 
 describe('useTheme', () => {
-  it('mặc định là editorial', () => {
-    expect(setup().result.current.themeId).toBe('editorial');
+  it('mặc định là aurora', () => {
+    expect(setup().result.current.themeId).toBe('aurora');
   });
 
   it('localStorage thắng mặc định', () => {
@@ -30,7 +30,7 @@ describe('useTheme', () => {
 
   it('bỏ qua giá trị rác, quay về mặc định', () => {
     window.history.replaceState({}, '', '/?theme=khong-ton-tai');
-    expect(setup().result.current.themeId).toBe('editorial');
+    expect(setup().result.current.themeId).toBe('aurora');
   });
 
   it('ghi data-theme lên thẻ html để CSS token đổi theo', () => {
@@ -45,8 +45,8 @@ describe('useTheme', () => {
     expect(localStorage.getItem('theme')).toBe('arcade');
   });
 
-  it('có metadata cho đủ 4 theme', () => {
-    expect(Object.keys(THEME_META).sort()).toEqual(['arcade', 'bento', 'editorial', 'terminal']);
+  it('có metadata cho đủ 5 theme', () => {
+    expect(Object.keys(THEME_META).sort()).toEqual(['arcade', 'aurora', 'bento', 'editorial', 'terminal']);
     for (const m of Object.values(THEME_META)) {
       expect(m.label.vi).toBeTruthy();
       expect(m.label.en).toBeTruthy();
@@ -61,6 +61,6 @@ describe('useTheme', () => {
       result.current.preload('arcade');
       result.current.preload('arcade');
     });
-    expect(result.current.themeId).toBe('editorial');
+    expect(result.current.themeId).toBe('aurora');
   });
 });

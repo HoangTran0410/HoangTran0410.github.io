@@ -3,12 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta name="theme-color" content="#f7f4ed" />
+    <meta name="theme-color" content="#08070c" />
 
     <title>Hoang Tran — Games, web, and small tools with real users</title>
     <meta
       name="description"
-      content="Portfolio của Hoang Tran: 46 dự án công khai gồm engine game 2D, extension trình duyệt hơn 500 sao, công cụ OSINT và creative coding. Bốn giao diện đổi được ngay trên trang."
+      content="Portfolio của Hoang Tran: 48 dự án công khai gồm engine game 2D, extension trình duyệt hơn 500 sao, công cụ OSINT và creative coding. Năm giao diện đổi được ngay trên trang."
     />
     <link rel="canonical" href="https://hoangtran99.is-a.dev/" />
     <link rel="alternate" hreflang="vi" href="https://hoangtran99.is-a.dev/?lang=vi" />
@@ -24,7 +24,7 @@
     <meta property="og:title" content="Hoang Tran — Games, web, and small tools with real users" />
     <meta
       property="og:description"
-      content="46 dự án công khai: engine MOBA 2D, extension hơn 500 sao, công cụ OSINT, creative coding. Bốn giao diện đổi được ngay trên trang."
+      content="48 dự án công khai: engine MOBA 2D, extension hơn 500 sao, công cụ OSINT, creative coding. Năm giao diện đổi được ngay trên trang."
     />
     <meta property="og:image" content="https://hoangtran99.is-a.dev/og.png" />
     <meta property="og:image:width" content="1200" />
@@ -36,7 +36,7 @@
     <meta name="twitter:title" content="Hoang Tran — Games, web, and small tools with real users" />
     <meta
       name="twitter:description"
-      content="46 dự án công khai: engine MOBA 2D, extension hơn 500 sao, công cụ OSINT, creative coding."
+      content="48 dự án công khai: engine MOBA 2D, extension hơn 500 sao, công cụ OSINT, creative coding."
     />
     <meta name="twitter:image" content="https://hoangtran99.is-a.dev/og.png" />
 
@@ -91,17 +91,17 @@
       // Chạy trước khi vẽ khung hình đầu tiên. Hai việc:
       //  1. Đặt data-theme sớm để phần đầu trang tĩnh bên dưới lấy đúng bộ màu —
       //     nếu để React đặt thì người dùng theme tối sẽ thấy một nháy trắng.
-      //  2. Không tin giá trị trong localStorage: chỉ nhận đúng bốn id đã biết.
+      //  2. Không tin giá trị trong localStorage: chỉ nhận đúng các id đã biết.
       (function () {
         try {
           var t = new URLSearchParams(location.search).get('theme') || localStorage.getItem('theme');
-          if (['editorial', 'arcade', 'bento', 'terminal'].indexOf(t) === -1) t = 'editorial';
+          if (['aurora', 'editorial', 'arcade', 'bento', 'terminal'].indexOf(t) === -1) t = 'aurora';
           document.documentElement.dataset.theme = t;
-          var dark = t === 'arcade' || t === 'terminal';
+          var dark = t === 'aurora' || t === 'arcade' || t === 'terminal';
           var m = document.querySelector('meta[name="theme-color"]');
           if (m) m.setAttribute('content', dark ? '#08070c' : '#f7f4ed');
         } catch (e) {
-          document.documentElement.dataset.theme = 'editorial';
+          document.documentElement.dataset.theme = 'aurora';
         }
       })();
     </script>
