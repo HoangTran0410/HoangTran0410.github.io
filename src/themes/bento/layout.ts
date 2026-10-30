@@ -95,6 +95,13 @@ function interleave(projects: Project[]): Project[] {
 
   const out: Project[] = big.splice(0, Math.min(2, big.length));
 
+  // Mỗi ô lớn đan cần đủ bốn ô nhỏ đi kèm, thiếu là hở lỗ cạnh nó. Ô lớn nào
+  // không đủ ô nhỏ thì xếp thành cặp cạnh nhau (một cặp kín đúng hai hàng),
+  // nên số ô lớn còn dư phải chẵn — lẻ thì bớt đan một ô.
+  let woven = Math.min(big.length, Math.floor(small.length / 4));
+  if ((big.length - woven) % 2 === 1 && woven > 0) woven -= 1;
+  const rest = big.splice(woven);
+
   let flip = false;
   while (big.length > 0) {
     const lead = big.shift() as Project;
@@ -104,6 +111,6 @@ function interleave(projects: Project[]): Project[] {
     flip = !flip;
   }
 
-  out.push(...small);
+  out.push(...rest, ...small);
   return out;
 }

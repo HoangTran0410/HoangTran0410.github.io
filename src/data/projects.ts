@@ -27,7 +27,7 @@ export const PROJECTS: CuratedProject[] = [
       en: "The biggest thing here, and the only one that brings in revenue every month. Media downloads, friend filters, recovering deleted messages, engagement stats — dozens of tools folded into one extension, with its own blog, a separate Firefox build, and a backend.",
     },
     category: "products",
-    tags: ["JavaScript", "React", "TypeScript", "Chrome Extension", "Node.js"],
+    tags: ["JavaScript", "React", "TypeScript", "HTML", "Chrome Extension", "Node.js"],
     links: { demo: "https://fbaio.org", more: "https://blog.fbaio.org/" },
     featured: true,
     year: 2023,
@@ -52,6 +52,25 @@ export const PROJECTS: CuratedProject[] = [
     links: {},
     featured: true,
     year: 2021,
+    status: "active",
+  },
+  {
+    slug: "tv-remote",
+    repo: "HoangTran0410/tv-remote",
+    title: "TV Remote",
+    tagline: {
+      vi: "Điều khiển Android TV / Google TV từ điện thoại, máy tính hay trình duyệt",
+      en: "Drive an Android TV / Google TV from your phone, computer or a browser",
+    },
+    blurb: {
+      vi: "Remote, xem màn hình TV, mở app, gửi file, gỡ bloatware và thay launcher sạch — tất cả đi thẳng từ máy mình tới TV, không cloud, không tài khoản, không root, đổi gì cũng hoàn tác được. Có app Android, app máy tính cho Mac, Windows, Linux, và một trang web chạy ngay trên TV cho người dùng iPhone. Ngoài Android TV còn nói chuyện được với LG, Samsung, Roku và VIDAA.",
+      en: "Remote keys, live picture, apps, file transfer, debloating and a clean launcher — everything goes straight from your device to the TV: no cloud, no account, no root, and every change can be undone. Ships as an Android app, a desktop app for Mac, Windows and Linux, and a web page served by the TV itself for iPhone users. Beyond Android TV it also talks to LG, Samsung, Roku and VIDAA sets.",
+    },
+    category: "products",
+    tags: ["Kotlin", "Android TV", "ADB", "Cross-platform", "Privacy"],
+    links: { demo: "https://tvremote.pages.dev" },
+    featured: true,
+    year: 2026,
     status: "active",
   },
   {
@@ -388,7 +407,7 @@ export const PROJECTS: CuratedProject[] = [
       en: "The release repo, kept apart from the development one: users download this, while work in progress lives elsewhere. There is a separate Firefox build, since the two platforms differ enough to not share one bundle.",
     },
     category: "extensions",
-    tags: ["JavaScript", "Chrome Extension", "Firefox Add-on", "Release"],
+    tags: ["JavaScript", "Chrome Extension", "Firefox Add-on", "Release", "HTML"],
     links: { demo: "https://fb-aio.github.io/" },
     year: 2024,
     status: "active",
@@ -541,6 +560,24 @@ export const PROJECTS: CuratedProject[] = [
     status: "maintained",
   },
 
+  {
+    slug: "emubar",
+    repo: "HoangTran0410/emubar",
+    title: "EmuBar",
+    tagline: {
+      vi: "Icon trên menu bar macOS đếm và tắt emulator Android, kể cả cái chạy ẩn",
+      en: "A macOS menu-bar icon that counts and kills Android emulators, hidden ones too",
+    },
+    blurb: {
+      vi: "Sinh ra sau một lần emulator headless chạy ngầm đốt hơn 600% CPU hàng giờ liền mà không có cửa sổ nào để nhắc. Làm mới mỗi 5 giây, đo CPU giữa hai lần làm mới, đổi icon sang đỏ khi có emulator ẩn quá lâu hoặc ngốn quá nhiều, và tắt sạch bằng `adb emu kill` để lần sau không hiện hộp thoại \"đóng bất thường\".",
+      en: "Born after a headless emulator quietly burned 600%+ CPU for hours with no window to remind me. Refreshes every 5 seconds, measures CPU between refreshes, turns red when something has been hidden too long or eats too much, and shuts emulators down cleanly with `adb emu kill` so there's no \"closed unexpectedly\" dialog next time.",
+    },
+    category: "devtools",
+    tags: ["Swift", "macOS", "Android", "ADB"],
+    links: {},
+    year: 2026,
+    status: "active",
+  },
   // ── OSINT & Bảo mật ────────────────────────────────────────────────────
   {
     slug: "github-osint",

@@ -29,8 +29,8 @@ describe('useTimeline', () => {
   });
 
   it('mốc công việc rơi vào đúng năm bắt đầu', () => {
-    const y2023 = setup().result.current.timeline.find((y) => y.year === 2023);
-    expect(y2023?.jobs.map((j) => j.company)).toContain('MoMo · M_Service');
+    const y2022 = setup().result.current.timeline.find((y) => y.year === 2022);
+    expect(y2022?.jobs.map((j) => j.company)).toContain('MoMo · M_Service');
   });
 
   it('theo bộ lọc hiện tại chứ không cố định', () => {
