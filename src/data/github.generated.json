@@ -578,7 +578,7 @@
   },
   "HoangTran0410/saoke_yagi": {
     "repo": "HoangTran0410/saoke_yagi",
-    "stars": 25,
+    "stars": 24,
     "forks": 5,
     "language": "JavaScript",
     "pushedAt": "2024-10-03",
@@ -629,10 +629,10 @@
   },
   "HoangTran0410/tv-remote": {
     "repo": "HoangTran0410/tv-remote",
-    "stars": 72,
+    "stars": 81,
     "forks": 20,
     "language": "Kotlin",
-    "pushedAt": "2026-10-30",
+    "pushedAt": "2026-11-02",
     "createdAt": "2026-10-12",
     "topics": [
       "adb",
@@ -742,7 +742,7 @@
   },
   "Useful-Scripts-Extension/useful-script": {
     "repo": "Useful-Scripts-Extension/useful-script",
-    "stars": 535,
+    "stars": 534,
     "forks": 97,
     "language": "JavaScript",
     "pushedAt": "2026-07-14",
