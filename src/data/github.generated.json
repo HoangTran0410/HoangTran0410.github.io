@@ -81,7 +81,7 @@
   },
   "HoangTran0410/FBMediaDownloader": {
     "repo": "HoangTran0410/FBMediaDownloader",
-    "stars": 190,
+    "stars": 191,
     "forks": 64,
     "language": "JavaScript",
     "pushedAt": "2025-02-27",
@@ -130,7 +130,7 @@
   },
   "HoangTran0410/LOL2D": {
     "repo": "HoangTran0410/LOL2D",
-    "stars": 14,
+    "stars": 15,
     "forks": 7,
     "language": "TypeScript",
     "pushedAt": "2026-10-17",
@@ -629,10 +629,10 @@
   },
   "HoangTran0410/tv-remote": {
     "repo": "HoangTran0410/tv-remote",
-    "stars": 83,
+    "stars": 85,
     "forks": 21,
     "language": "Kotlin",
-    "pushedAt": "2026-11-03",
+    "pushedAt": "2026-11-04",
     "createdAt": "2026-10-12",
     "topics": [
       "adb",
@@ -723,7 +723,7 @@
     "stars": 11,
     "forks": 7,
     "language": "HTML",
-    "pushedAt": "2026-11-02",
+    "pushedAt": "2026-11-04",
     "createdAt": "2024-10-21",
     "topics": [
       "all-in-one",
@@ -742,7 +742,7 @@
   },
   "Useful-Scripts-Extension/useful-script": {
     "repo": "Useful-Scripts-Extension/useful-script",
-    "stars": 534,
+    "stars": 535,
     "forks": 97,
     "language": "JavaScript",
     "pushedAt": "2026-07-14",
@@ -775,7 +775,7 @@
     "stars": 7,
     "forks": 2,
     "language": "HTML",
-    "pushedAt": "2026-11-02",
+    "pushedAt": "2026-11-04",
     "createdAt": "2024-12-12",
     "topics": [],
     "archived": false,
