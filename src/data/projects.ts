@@ -791,6 +791,25 @@ export const PROJECTS: CuratedProject[] = [
     status: "archived",
   },
   {
+    slug: "everynoise",
+    repo: "HoangTran0410/everynoise",
+    title: "Everynoise",
+    tagline: {
+      vi: "Bản đồ gần 6.000 thể loại nhạc, chạm vào là nghe ngay",
+      en: "A map of nearly 6,000 music genres — tap one and hear it",
+    },
+    blurb: {
+      vi: "Làm lại Every Noise at Once (trang đã ngừng cập nhật từ 2023) thành PWA chạy mượt trên điện thoại, iPad và máy tính: zoom như bản đồ, player nổi tự trôi sang thể loại gần giống, visualizer nhảy theo nhịp kick, trò đoán thể loại và chế độ trẻ em. Không build, không thư viện, có tiếng Việt.",
+      en: "Every Noise at Once (frozen since 2023) rebuilt as a PWA that runs smoothly on phone, iPad and desktop: maps-style zoom, a floating player that drifts to similar genres, a beat-reactive visualizer, a guess-the-genre quiz and a kids mode. No build step, zero dependencies, English and Vietnamese UI.",
+    },
+    category: "creative",
+    tags: ["JavaScript", "PWA", "Web Audio API", "Music"],
+    links: { demo: "https://everynoise.pages.dev" },
+    year: 2026,
+    month: 11,
+    status: "active",
+  },
+  {
     slug: "qr-jigsaw",
     repo: "HoangTran0410/qr-jigsaw",
     title: "QR Jigsaw",

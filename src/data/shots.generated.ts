@@ -14,6 +14,7 @@ export const SHOT_SLUGS: string[] = [
   'cryptoflow',
   'doan-web1',
   'documorph',
+  'everynoise',
   'face-compare',
   'fbaio',
   'fbaio-ext',
