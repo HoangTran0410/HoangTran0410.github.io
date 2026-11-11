@@ -629,10 +629,10 @@
   },
   "HoangTran0410/tv-remote": {
     "repo": "HoangTran0410/tv-remote",
-    "stars": 99,
+    "stars": 101,
     "forks": 24,
     "language": "Kotlin",
-    "pushedAt": "2026-11-09",
+    "pushedAt": "2026-11-10",
     "createdAt": "2026-10-12",
     "topics": [
       "adb",
