@@ -596,7 +596,7 @@
   },
   "HoangTran0410/time-horizon": {
     "repo": "HoangTran0410/time-horizon",
-    "stars": 39,
+    "stars": 38,
     "forks": 9,
     "language": "TypeScript",
     "pushedAt": "2026-11-06",
@@ -630,9 +630,9 @@
   "HoangTran0410/tv-remote": {
     "repo": "HoangTran0410/tv-remote",
     "stars": 101,
-    "forks": 24,
+    "forks": 25,
     "language": "Kotlin",
-    "pushedAt": "2026-11-10",
+    "pushedAt": "2026-11-12",
     "createdAt": "2026-10-12",
     "topics": [
       "adb",
@@ -723,7 +723,7 @@
     "stars": 11,
     "forks": 7,
     "language": "HTML",
-    "pushedAt": "2026-11-06",
+    "pushedAt": "2026-11-11",
     "createdAt": "2024-10-21",
     "topics": [
       "all-in-one",
@@ -775,7 +775,7 @@
     "stars": 7,
     "forks": 2,
     "language": "HTML",
-    "pushedAt": "2026-11-06",
+    "pushedAt": "2026-11-11",
     "createdAt": "2024-12-12",
     "topics": [],
     "archived": false,
