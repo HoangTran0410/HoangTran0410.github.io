@@ -41,7 +41,7 @@
   },
   "HoangTran0410/DoAn_Web1": {
     "repo": "HoangTran0410/DoAn_Web1",
-    "stars": 54,
+    "stars": 55,
     "forks": 46,
     "language": "JavaScript",
     "pushedAt": "2024-06-23",
@@ -629,10 +629,10 @@
   },
   "HoangTran0410/tv-remote": {
     "repo": "HoangTran0410/tv-remote",
-    "stars": 105,
+    "stars": 106,
     "forks": 27,
     "language": "Kotlin",
-    "pushedAt": "2026-11-16",
+    "pushedAt": "2026-11-18",
     "createdAt": "2026-10-12",
     "topics": [
       "adb",
@@ -743,7 +743,7 @@
   "Useful-Scripts-Extension/useful-script": {
     "repo": "Useful-Scripts-Extension/useful-script",
     "stars": 536,
-    "forks": 97,
+    "forks": 98,
     "language": "JavaScript",
     "pushedAt": "2026-07-14",
     "createdAt": "2022-10-28",
