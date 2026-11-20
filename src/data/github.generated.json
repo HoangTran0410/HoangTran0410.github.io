@@ -108,7 +108,7 @@
   },
   "HoangTran0410/GunGame2": {
     "repo": "HoangTran0410/GunGame2",
-    "stars": 11,
+    "stars": 10,
     "forks": 8,
     "language": "JavaScript",
     "pushedAt": "2022-10-26",
@@ -629,10 +629,10 @@
   },
   "HoangTran0410/tv-remote": {
     "repo": "HoangTran0410/tv-remote",
-    "stars": 107,
+    "stars": 108,
     "forks": 27,
     "language": "Kotlin",
-    "pushedAt": "2026-11-19",
+    "pushedAt": "2026-11-20",
     "createdAt": "2026-10-12",
     "topics": [
       "adb",
@@ -742,7 +742,7 @@
   },
   "Useful-Scripts-Extension/useful-script": {
     "repo": "Useful-Scripts-Extension/useful-script",
-    "stars": 536,
+    "stars": 534,
     "forks": 98,
     "language": "JavaScript",
     "pushedAt": "2026-07-14",
