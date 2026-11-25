@@ -641,9 +641,9 @@
   "HoangTran0410/tv-remote": {
     "repo": "HoangTran0410/tv-remote",
     "stars": 108,
-    "forks": 28,
+    "forks": 29,
     "language": "Kotlin",
-    "pushedAt": "2026-11-23",
+    "pushedAt": "2026-11-25",
     "createdAt": "2026-10-12",
     "topics": [
       "adb",
@@ -734,7 +734,7 @@
     "stars": 11,
     "forks": 7,
     "language": "HTML",
-    "pushedAt": "2026-11-20",
+    "pushedAt": "2026-11-25",
     "createdAt": "2024-10-21",
     "topics": [
       "all-in-one",
@@ -786,7 +786,7 @@
     "stars": 7,
     "forks": 3,
     "language": "HTML",
-    "pushedAt": "2026-11-20",
+    "pushedAt": "2026-11-25",
     "createdAt": "2024-12-12",
     "topics": [],
     "archived": false,
