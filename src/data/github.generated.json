@@ -640,10 +640,10 @@
   },
   "HoangTran0410/tv-remote": {
     "repo": "HoangTran0410/tv-remote",
-    "stars": 108,
-    "forks": 29,
+    "stars": 111,
+    "forks": 28,
     "language": "Kotlin",
-    "pushedAt": "2026-11-26",
+    "pushedAt": "2026-11-28",
     "createdAt": "2026-10-12",
     "topics": [
       "adb",
@@ -734,7 +734,7 @@
     "stars": 11,
     "forks": 7,
     "language": "HTML",
-    "pushedAt": "2026-11-25",
+    "pushedAt": "2026-11-27",
     "createdAt": "2024-10-21",
     "topics": [
       "all-in-one",
@@ -753,7 +753,7 @@
   },
   "Useful-Scripts-Extension/useful-script": {
     "repo": "Useful-Scripts-Extension/useful-script",
-    "stars": 535,
+    "stars": 536,
     "forks": 98,
     "language": "JavaScript",
     "pushedAt": "2026-07-14",
@@ -786,7 +786,7 @@
     "stars": 7,
     "forks": 3,
     "language": "HTML",
-    "pushedAt": "2026-11-25",
+    "pushedAt": "2026-11-27",
     "createdAt": "2024-12-12",
     "topics": [],
     "archived": false,
